@@ -3,7 +3,7 @@ package model;
 import java.util.UUID;
 
 public class Produto {
-    private UUID id;
+    private UUID id = UUID.randomUUID();
     private String nome;
     private String descricao;
     private double preco;
@@ -51,7 +51,6 @@ public class Produto {
     //#region constructor
 
     public Produto(String nome, String descricao, double preco, int quantidade, int quantidadeMinima) {
-        this.id = UUID.randomUUID();
         this.nome = nome;
         this.descricao = descricao;
         this.preco = preco;
@@ -60,7 +59,6 @@ public class Produto {
     }
 
     public Produto(){
-        this.id = UUID.randomUUID();
     }
 
     //#endregion
