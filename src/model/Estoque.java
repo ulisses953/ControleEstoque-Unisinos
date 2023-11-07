@@ -6,6 +6,7 @@ import java.util.UUID;
 public class Estoque {
     private UUID id = UUID.randomUUID();
     private List<Produto> produtos;
+
     
     //#region get and set 
     public UUID getId() {
@@ -28,7 +29,7 @@ public class Estoque {
         this.produtos = produtos;
     }
     public Estoque() {
-        
+
     }
     //#endregion
     
