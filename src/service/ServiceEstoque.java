@@ -3,47 +3,88 @@ package service;
 import java.util.List;
 import java.util.UUID;
 
+import error.IdNotFound;
 import interfaces.InterfaceCRUD;
 import model.Estoque;
 import model.Produto;
 
-public class ServiceEstoque implements InterfaceCRUD<Produto>{
+public class ServiceEstoque implements InterfaceCRUD<Produto, UUID>{
     private Estoque estoque;
 
     @Override
-    public Produto update(Produto objeto, UUID id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'update'");
-    }
-    @Override
-    public Produto update(Produto objeto) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'update'");
-    }
-    @Override
-    public Produto salvar(Produto obejeto) {
+    public Produto update(Produto object, UUID id) {
+        final Integer INDEX = findByIndex(id); 
         List<Produto> list = estoque.getProdutos();
 
-        list.add(obejeto);
+        if (INDEX == null) {
+            throw new IdNotFound("id not found id:" + id);
+        }
+
+        list.add(INDEX, object);
+        
+        estoque.setProdutos(list);
+
+        return object;
+    }
+
+    @Override
+    public Produto update(Produto object) {
+        return update(object, object.getId());
+
+    }
+
+    @Override
+    public Produto save(Produto object) {
+        List<Produto> list = estoque.getProdutos();
+        list.add(object);
 
         estoque.setProdutos(list);
 
-        return obejeto;
+        return object;
     }
+
     @Override
-    public Produto excluir(UUID id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'excluir'");
+    public Produto delete(UUID id) {
+        final Integer INDEX = findByIndex(id);
+        final Produto OBJ =  findById(id);
+        List<Produto> list = estoque.getProdutos();
+
+        if (INDEX == null) {
+            throw new IdNotFound("id not found id:" + id);
+        }
+
+        list.remove(INDEX);
+
+        estoque.setProdutos(list);
+
+        return OBJ;
     }
+
     @Override
-    public Produto findbyid(UUID id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'findbyid'");
+    public Produto findById(UUID id) {
+        List<Produto> list = estoque.getProdutos();
+
+        for (Produto produto : list) {
+            if(produto.getId() == id) {
+                return produto;
+            }
+        }
+        throw new IdNotFound("id not found id:" + id);
     }
-    @Override
+    
+    public Integer findByIndex(UUID id) {
+        List<Produto> list = estoque.getProdutos();
+
+        for (int i = 0; i < list.size();i++) {
+            if(list.get(i).getId() == id) {
+                return i;
+            }
+        }
+        throw new IdNotFound("id not found id:" + id);
+    }
+    
     public List<Produto> findAll() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'findAll'");
+        return estoque.getProdutos();
     }
     //#region get and set
     public Estoque getEstoque() {
@@ -59,7 +100,7 @@ public class ServiceEstoque implements InterfaceCRUD<Produto>{
         this.estoque = estoque;
     }
 
-     public ServiceEstoque(List<Produto> produtos) {
+    public ServiceEstoque(List<Produto> produtos) {
         this.estoque = new Estoque(produtos);
     }
     //#endregion

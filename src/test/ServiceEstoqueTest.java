@@ -36,7 +36,10 @@ public class ServiceEstoqueTest {
         ServiceEstoque serviceEstoque = new ServiceEstoque(new ArrayList<Produto>());
         var p1 = new Produto("ps5","ps5 500gb",5000.00,3,2);
 
-        assertEquals(p1, serviceEstoque.salvar(p1));
+        assertEquals(p1, serviceEstoque.save(p1));
+
+        assertEquals(1, serviceEstoque.getEstoque().getProdutos().size());
+
     }
 
     @Test

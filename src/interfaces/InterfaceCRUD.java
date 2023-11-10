@@ -3,17 +3,19 @@ package interfaces;
 import java.util.List;
 import java.util.UUID;
 
-public interface InterfaceCRUD<T> {
+public interface InterfaceCRUD<T, ID> {
 
-    public T update(T objeto, UUID id);
+    public T update(T object, UUID id);
 
-    public T update(T objeto);
+    public T update(T object);
 
-    public T salvar(T obejeto);
+    public T save(T object);
 
-    public T excluir(UUID id);
+    public T delete(ID id);
 
-    public T findbyid(UUID id);
+    public T findById(ID id);
+
+    public Integer findByIndex(ID id);
 
     public List<T> findAll();
 
