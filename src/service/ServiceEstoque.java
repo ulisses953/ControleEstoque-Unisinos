@@ -47,16 +47,15 @@ public class ServiceEstoque implements InterfaceCRUD<Produto, UUID>{
 
     @Override
     public Produto delete(UUID id) {
-        final Integer INDEX = findByIndex(id);
         final Produto OBJ =  findById(id);
         List<Produto> list = estoque.getProdutos();
 
-        if (INDEX == null) {
+        if (OBJ == null) {
             throw new IdNotFound("id not found id:" + id);
         }
 
-        list.remove(INDEX);
-
+        list.remove(OBJ);
+        
         estoque.setProdutos(list);
 
         return OBJ;
