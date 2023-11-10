@@ -10,8 +10,10 @@ import model.Produto;
 
 public class ServiceEstoque implements InterfaceCRUD<Produto, UUID>{
     private Estoque estoque;
-
+  
+    
     @Override
+    
     public Produto update(Produto object, UUID id) {
         final Integer INDEX = findByIndex(id); 
         List<Produto> list = estoque.getProdutos();

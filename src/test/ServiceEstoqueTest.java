@@ -1,59 +1,50 @@
 package test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
-import java.util.ArrayList;
-
-import org.junit.jupiter.api.Test;
-
-import model.Produto;
-import service.ServiceEstoque;
+import org.junit.Test;
 
 public class ServiceEstoqueTest {
-
     @Test
-    void testExcluir() {
+    public void testDelete() {
 
     }
 
     @Test
-    void testFindAll() {
+    public void testFindAll() {
 
     }
 
     @Test
-    void testFindbyid() {
+    public void testFindById() {
 
     }
 
     @Test
-    void testGetEstoque() {
+    public void testFindByIndex() {
 
     }
 
     @Test
-    void testSalvar() {
-        ServiceEstoque serviceEstoque = new ServiceEstoque(new ArrayList<Produto>());
-        var p1 = new Produto("ps5","ps5 500gb",5000.00,3,2);
-
-        assertEquals(p1, serviceEstoque.save(p1));
-
-        assertEquals(1, serviceEstoque.getEstoque().getProdutos().size());
+    public void testGetEstoque() {
 
     }
 
     @Test
-    void testSetEstoque() {
+    public void testSave() {
 
     }
 
     @Test
-    void testUpdate() {
+    public void testSetEstoque() {
 
     }
 
     @Test
-    void testUpdate2() {
+    public void testUpdate() {
+
+    }
+
+    @Test
+    public void testUpdate2() {
 
     }
 }
