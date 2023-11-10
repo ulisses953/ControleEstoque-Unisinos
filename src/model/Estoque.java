@@ -24,12 +24,11 @@ public class Estoque {
     //#endregion
 
     //#region constructor 
-    public Estoque(UUID id, List<Produto> produtos) {
-        this.id = id;
+    public Estoque(List<Produto> produtos) {
         this.produtos = produtos;
     }
     public Estoque() {
-        
+
     }
     //#endregion
     

@@ -5,51 +5,64 @@ import java.util.UUID;
 
 import interfaces.InterfaceCRUD;
 import model.Estoque;
+import model.Produto;
 
-public class ServiceEstoque implements InterfaceCRUD{
+public class ServiceEstoque implements InterfaceCRUD<Produto>{
     private Estoque estoque;
 
     @Override
-    public Object update(Object objeto, UUID id) {
+    public Produto update(Produto objeto, UUID id) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'update'");
     }
-
     @Override
-    public Object update(Object objeto) {
+    public Produto update(Produto objeto) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'update'");
     }
-
     @Override
-    public Object salvar(Object obejeto) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'salvar'");
+    public Produto salvar(Produto obejeto) {
+        List<Produto> list = estoque.getProdutos();
+
+        list.add(obejeto);
+
+        estoque.setProdutos(list);
+
+        return obejeto;
     }
-
     @Override
-    public Object excluir(UUID id) {
+    public Produto excluir(UUID id) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'excluir'");
     }
-
     @Override
-    public Object findbyid(UUID id) {
+    public Produto findbyid(UUID id) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'findbyid'");
     }
-
     @Override
-    public List findAll() {
+    public List<Produto> findAll() {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'findAll'");
     }
-    
-    //#region constructors
-
-    public ServiceEstoque(Estoque estoque) {
+    //#region get and set
+    public Estoque getEstoque() {
+        return estoque;
+    }
+    public void setEstoque(Estoque estoque) {
         this.estoque = estoque;
     }
     //#endregion
+
+    //#region constructors
+    public ServiceEstoque(Estoque estoque) {
+        this.estoque = estoque;
+    }
+
+     public ServiceEstoque(List<Produto> produtos) {
+        this.estoque = new Estoque(produtos);
+    }
+    //#endregion
+   
     
 }

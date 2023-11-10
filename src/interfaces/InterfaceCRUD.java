@@ -3,7 +3,7 @@ package interfaces;
 import java.util.List;
 import java.util.UUID;
 
-public interface InterfaceCRUD<T, E> {
+public interface InterfaceCRUD<T> {
 
     public T update(T objeto, UUID id);
 
