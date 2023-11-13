@@ -3,9 +3,9 @@ package model;
 import java.util.List;
 import java.util.UUID;
 
-public class Estoque {
+public class Stock {
     private UUID id = UUID.randomUUID();
-    private List<Produto> produtos;
+    private List<Product> products;
 
     
     //#region get and set 
@@ -15,19 +15,19 @@ public class Estoque {
     public void setId(UUID id) {
         this.id = id;
     }
-    public List<Produto> getProdutos() {
-        return produtos;
+    public List<Product> getProducts() {
+        return products;
     }
-    public void setProdutos(List<Produto> produtos) {
-        this.produtos = produtos;
+    public void setProducts(List<Product> produtos) {
+        this.products = produtos;
     }
     //#endregion
 
     //#region constructor 
-    public Estoque(List<Produto> produtos) {
-        this.produtos = produtos;
+    public Stock(List<Product> produtos) {
+        this.products = produtos;
     }
-    public Estoque() {
+    public Stock() {
 
     }
     //#endregion

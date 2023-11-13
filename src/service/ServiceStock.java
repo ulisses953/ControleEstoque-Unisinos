@@ -5,16 +5,16 @@ import java.util.UUID;
 
 import error.IdNotFound;
 import interfaces.InterfaceCRUD;
-import model.Estoque;
-import model.Produto;
+import model.Stock;
+import model.Product;
 
-public class ServiceEstoque implements InterfaceCRUD<Produto, UUID>{
-    private Estoque estoque;
+public class ServiceEstoque implements InterfaceCRUD<Product, UUID>{
+    private Stock estoque;
   
     @Override
-    public Produto update(Produto object, UUID id) throws IdNotFound {
+    public Product update(Product object, UUID id) {
         final Integer INDEX = findByIndex(id); 
-        List<Produto> list = estoque.getProdutos();
+        List<Product> list = estoque.getProducts();
 
         if (INDEX == null) {
             throw new IdNotFound("id not found id:" + id);
@@ -22,30 +22,30 @@ public class ServiceEstoque implements InterfaceCRUD<Produto, UUID>{
 
         list.add(INDEX, object);
         
-        estoque.setProdutos(list);
+        estoque.setProducts(list);
 
         return object;
     }
 
     @Override
-    public Produto update(Produto object) throws IdNotFound {
+    public Product update(Product object) {
         return update(object, object.getId());
     }
 
     @Override
-    public Produto save(Produto object) {
-        List<Produto> list = estoque.getProdutos();
+    public Product save(Product object) {
+        List<Product> list = estoque.getProducts();
         list.add(object);
 
-        estoque.setProdutos(list);
+        estoque.setProducts(list);
 
         return object;
     }
 
     @Override
-    public Produto delete(UUID id) throws IdNotFound {
-        final Produto OBJ =  findById(id);
-        List<Produto> list = estoque.getProdutos();
+    public Product delete(UUID id)  {
+        final Product OBJ =  findById(id);
+        List<Product> list = estoque.getProducts();
 
         if (OBJ == null) {
             throw new IdNotFound("id not found id:" + id);
@@ -53,16 +53,16 @@ public class ServiceEstoque implements InterfaceCRUD<Produto, UUID>{
 
         list.remove(OBJ);
         
-        estoque.setProdutos(list);
+        estoque.setProducts(list);
 
         return OBJ;
     } 
 
     @Override
-    public Produto findById(UUID id) throws IdNotFound {
-        List<Produto> list = estoque.getProdutos();
+    public Product findById(UUID id) {
+        List<Product> list = estoque.getProducts();
 
-        for (Produto produto : list) {
+        for (Product produto : list) {
             if(produto.getId() == id) {
                 return produto;
             }
@@ -70,8 +70,8 @@ public class ServiceEstoque implements InterfaceCRUD<Produto, UUID>{
         throw new IdNotFound("id not found id:" + id);
     }
     
-    public Integer findByIndex(UUID id) throws IdNotFound {
-        List<Produto> list = estoque.getProdutos();
+    public Integer findByIndex(UUID id) {
+        List<Product> list = estoque.getProducts();
 
         for (int i = 0; i < list.size();i++) {
             if(list.get(i).getId() == id) {
@@ -81,25 +81,25 @@ public class ServiceEstoque implements InterfaceCRUD<Produto, UUID>{
         throw new IdNotFound("id not found id:" + id);
     }
     
-    public List<Produto> findAll() {
-        return estoque.getProdutos();
+    public List<Product> findAll() {
+        return estoque.getProducts();
     }
     //#region get and set
-    public Estoque getEstoque() {
+    public Stock getEstoque() {
         return estoque;
     }
-    public void setEstoque(Estoque estoque) {
+    public void setEstoque(Stock estoque) {
         this.estoque = estoque;
     }
     //#endregion
 
     //#region constructors
-    public ServiceEstoque(Estoque estoque) {
+    public ServiceEstoque(Stock estoque) {
         this.estoque = estoque;
     }
 
-    public ServiceEstoque(List<Produto> produtos) {
-        this.estoque = new Estoque(produtos);
+    public ServiceEstoque(List<Product> produtos) {
+        this.estoque = new Stock(produtos);
     }
     //#endregion
    
