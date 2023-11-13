@@ -2,13 +2,13 @@ package model;
 
 import java.util.UUID;
 
-public class Produto {
+public class Product {
     private UUID id = UUID.randomUUID();
-    private String nome;
-    private String descricao;
-    private double preco;
-    private int quantidade;
-    private int quantidadeMinima;
+    private String name;
+    private String description;
+    private double price;
+    private int quantity;
+    private int minimumQuantity;
     
     //#region get and set 
     public UUID getId() {
@@ -17,49 +17,49 @@ public class Produto {
     public void setId(UUID id) {
         this.id = id;
     }
-    public String getNome() {
-        return nome;
+    public String getName() {
+        return name;
     }
-    public void setNome(String nome) {
-        this.nome = nome;
+    public void setName(String name) {
+        this.name = name;
     }
-    public String getDescricao() {
-        return descricao;
+    public String getDescription() {
+        return description;
     }
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
+    public void setDescription(String description) {
+        this.description = description;
     }
-    public double getPreco() {
-        return preco;
+    public double getPrice() {
+        return price;
     }
-    public void setPreco(double preco) {
-        this.preco = preco;
+    public void setPrice(double price) {
+        this.price = price;
     }
-    public int getQuantidade() {
-        return quantidade;
+    public int getQuantity() {
+        return quantity;
     }
-    public void setQuantidade(int quantidade) {
-        this.quantidade = quantidade;
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
-    public int getQuantidadeMinima() {
-        return quantidadeMinima;
+    public int getMinimumQuantity() {
+        return minimumQuantity;
     }
-    public void setQuantidadeMinima(int quantidadeMinima) {
-        this.quantidadeMinima = quantidadeMinima;
+    public void setMinimumQuantity(int minimumQuantity) {
+        this.minimumQuantity = minimumQuantity;
     }
     //#endregion
     
     //#region constructor
 
-    public Produto(String nome, String descricao, double preco, int quantidade, int quantidadeMinima) {
-        this.nome = nome;
-        this.descricao = descricao;
-        this.preco = preco;
-        this.quantidade = quantidade;
-        this.quantidadeMinima = quantidadeMinima;
+    public Product(String name, String description, double price, int quantity, int minimumQuantity) {
+        this.name = name;
+        this.description = description;
+        this.price = price;
+        this.quantity = quantity;
+        this.minimumQuantity = minimumQuantity;
     }
 
-    public Produto(){
+    public Product(){
         
     }
 

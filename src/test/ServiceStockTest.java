@@ -2,7 +2,7 @@ package test;
 
 import org.junit.Test;
 
-public class ServiceEstoqueTest {
+public class ServiceStockTest {
     @Test
     public void testDelete() {
         
