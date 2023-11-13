@@ -5,17 +5,17 @@ import java.util.UUID;
 
 public interface InterfaceCRUD<T, ID> {
 
-    public T update(T object, UUID id);
+    public T update(T object, UUID id) throws Exception;
 
-    public T update(T object);
+    public T update(T object) throws Exception;
 
-    public T save(T object);
+    public T save(T object) throws Exception;
 
-    public T delete(ID id);
+    public T delete(ID id) throws Exception ;
 
-    public T findById(ID id);
+    public T findById(ID id) throws Exception;
 
-    public Integer findByIndex(ID id);
+    public Integer findByIndex(ID id)throws Exception;
 
     public List<T> findAll();
 

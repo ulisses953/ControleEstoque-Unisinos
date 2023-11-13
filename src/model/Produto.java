@@ -48,6 +48,7 @@ public class Produto {
         this.quantidadeMinima = quantidadeMinima;
     }
     //#endregion
+    
     //#region constructor
 
     public Produto(String nome, String descricao, double preco, int quantidade, int quantidadeMinima) {

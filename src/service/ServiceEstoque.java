@@ -11,10 +11,8 @@ import model.Produto;
 public class ServiceEstoque implements InterfaceCRUD<Produto, UUID>{
     private Estoque estoque;
   
-    
     @Override
-    
-    public Produto update(Produto object, UUID id) {
+    public Produto update(Produto object, UUID id) throws IdNotFound {
         final Integer INDEX = findByIndex(id); 
         List<Produto> list = estoque.getProdutos();
 
@@ -30,9 +28,8 @@ public class ServiceEstoque implements InterfaceCRUD<Produto, UUID>{
     }
 
     @Override
-    public Produto update(Produto object) {
+    public Produto update(Produto object) throws IdNotFound {
         return update(object, object.getId());
-
     }
 
     @Override
@@ -46,7 +43,7 @@ public class ServiceEstoque implements InterfaceCRUD<Produto, UUID>{
     }
 
     @Override
-    public Produto delete(UUID id) {
+    public Produto delete(UUID id) throws IdNotFound {
         final Produto OBJ =  findById(id);
         List<Produto> list = estoque.getProdutos();
 
@@ -59,10 +56,10 @@ public class ServiceEstoque implements InterfaceCRUD<Produto, UUID>{
         estoque.setProdutos(list);
 
         return OBJ;
-    }
+    } 
 
     @Override
-    public Produto findById(UUID id) {
+    public Produto findById(UUID id) throws IdNotFound {
         List<Produto> list = estoque.getProdutos();
 
         for (Produto produto : list) {
@@ -73,7 +70,7 @@ public class ServiceEstoque implements InterfaceCRUD<Produto, UUID>{
         throw new IdNotFound("id not found id:" + id);
     }
     
-    public Integer findByIndex(UUID id) {
+    public Integer findByIndex(UUID id) throws IdNotFound {
         List<Produto> list = estoque.getProdutos();
 
         for (int i = 0; i < list.size();i++) {
