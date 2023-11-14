@@ -84,6 +84,24 @@ public class ServiceStock implements InterfaceCRUD<Product, UUID>{
     public List<Product> findAll() {
         return stock.getProducts();
     }
+
+    public Product addToStock(UUID id, int amount) throws IdNotFound {
+        if (amount < 0) return null;
+        Product product = findById(id);
+        amount += product.getQuantity();
+        product.setQuantity(amount);
+        return product;
+    }
+
+    public Product removeFromStock(UUID id, int amount) throws IdNotFound {
+        Product product = findById(id);
+        if (amount > 0) amount *= -1;
+        amount += product.getQuantity();
+        if (amount < 0) return null;
+        product.setQuantity(amount);
+        return product;
+    }
+
     //#region get and set
     public Stock getStock() {
         return stock;
