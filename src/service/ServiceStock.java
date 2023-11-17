@@ -1,5 +1,6 @@
 package service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -10,28 +11,30 @@ import model.Product;
 
 public class ServiceStock implements InterfaceCRUD<Product, UUID>{
     private Stock stock;
-    
+  
+    @Override
     public Product update(Product object, UUID id) throws IdNotFound {
-        object.setId(id);
+        final Integer INDEX = findByIndex(id); 
+        List<Product> list = stock.getProducts();
 
-        return update(object);
-    }
-
-    
-    public Product update(Product object) throws IdNotFound {
-        Product result = findById(object.getId());
-
-        result = object;
-
-        return result;
-    }
-
-    
-    public Product save(Product object) throws IllegalArgumentException{
-        if (object == null) {
-            throw new IllegalArgumentException();   
+        if (INDEX == null) {
+            throw new IdNotFound("id not found id:" + id);
         }
 
+        list.add(INDEX, object);
+        
+        stock.setProducts(list);
+
+        return object;
+    }
+
+    @Override
+    public Product update(Product object) throws IdNotFound {
+        return update(object, object.getId());
+    }
+
+    @Override
+    public Product save(Product object) {
         List<Product> list = stock.getProducts();
         list.add(object);
 
@@ -40,11 +43,14 @@ public class ServiceStock implements InterfaceCRUD<Product, UUID>{
         return object;
     }
 
-    
+    @Override
     public Product delete(UUID id) throws IdNotFound  {
-        final Product OBJ = findById(id);
-
+        final Product OBJ =  findById(id);
         List<Product> list = stock.getProducts();
+
+        if (OBJ == null) {
+            throw new IdNotFound("id not found id:" + id);
+        }
 
         list.remove(OBJ);
         
@@ -53,13 +59,10 @@ public class ServiceStock implements InterfaceCRUD<Product, UUID>{
         return OBJ;
     } 
 
-    
-    public Product findById(UUID id) throws IdNotFound,IllegalArgumentException {
+    @Override
+    public Product findById(UUID id) throws IdNotFound {
         List<Product> list = stock.getProducts();
 
-        if (id == null) {
-            throw new IllegalArgumentException("id cannot be null");
-        }
         for (Product produto : list) {
             if(produto.getId() == id) {
                 return produto;
@@ -68,11 +71,7 @@ public class ServiceStock implements InterfaceCRUD<Product, UUID>{
         throw new IdNotFound("id not found id:" + id);
     }
     
-    public Integer findByIndex(UUID id) throws IdNotFound,IllegalArgumentException {
-        if(id ==  null){
-            throw new IllegalArgumentException("id cannot be null");
-        }
-
+    public Integer findByIndex(UUID id) throws IdNotFound {
         List<Product> list = stock.getProducts();
 
         for (int i = 0; i < list.size();i++) {
@@ -104,6 +103,17 @@ public class ServiceStock implements InterfaceCRUD<Product, UUID>{
         return product;
     }
 
+    public List<Product> seeUnderstockedProducts(){
+        List<Product> returnList = new ArrayList<Product>();
+        final List<Product> LIST = stock.getProducts();
+        for (Product product : LIST) {
+            if(product.getQuantity() < product.getMinimumQuantity()){
+                returnList.add(product);
+            }
+        }
+        return returnList;
+    }
+
     //#region get and set
     public Stock getStock() {
         return stock;
@@ -121,7 +131,6 @@ public class ServiceStock implements InterfaceCRUD<Product, UUID>{
     public ServiceStock(List<Product> products) {
         this.stock = new Stock(products);
     }
-
     //#endregion
    
     
