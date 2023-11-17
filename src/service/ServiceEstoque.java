@@ -4,11 +4,11 @@ import java.util.List;
 import java.util.UUID;
 
 import error.IdNotFound;
-import interfaces.InterfaceCRUD;
+import interfaces.CRUD;
 import model.Estoque;
 import model.Produto;
 
-public class ServiceEstoque implements InterfaceCRUD<Produto, UUID>{
+public class ServiceEstoque implements CRUD<Produto, UUID>{
     private Estoque estoque;
   
     
