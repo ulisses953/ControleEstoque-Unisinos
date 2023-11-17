@@ -10,30 +10,28 @@ import model.Product;
 
 public class ServiceStock implements InterfaceCRUD<Product, UUID>{
     private Stock stock;
-  
-    @Override
+    
     public Product update(Product object, UUID id) throws IdNotFound {
-        final Integer INDEX = findByIndex(id); 
-        List<Product> list = stock.getProducts();
+        object.setId(id);
 
-        if (INDEX == null) {
-            throw new IdNotFound("id not found id:" + id);
+        return update(object);
+    }
+
+    
+    public Product update(Product object) throws IdNotFound {
+        Product result = findById(object.getId());
+
+        result = object;
+
+        return result;
+    }
+
+    
+    public Product save(Product object) throws IllegalArgumentException{
+        if (object == null) {
+            throw new IllegalArgumentException();   
         }
 
-        list.add(INDEX, object);
-        
-        stock.setProducts(list);
-
-        return object;
-    }
-
-    @Override
-    public Product update(Product object) throws IdNotFound {
-        return update(object, object.getId());
-    }
-
-    @Override
-    public Product save(Product object) {
         List<Product> list = stock.getProducts();
         list.add(object);
 
@@ -42,14 +40,11 @@ public class ServiceStock implements InterfaceCRUD<Product, UUID>{
         return object;
     }
 
-    @Override
+    
     public Product delete(UUID id) throws IdNotFound  {
-        final Product OBJ =  findById(id);
-        List<Product> list = stock.getProducts();
+        final Product OBJ = findById(id);
 
-        if (OBJ == null) {
-            throw new IdNotFound("id not found id:" + id);
-        }
+        List<Product> list = stock.getProducts();
 
         list.remove(OBJ);
         
@@ -58,10 +53,13 @@ public class ServiceStock implements InterfaceCRUD<Product, UUID>{
         return OBJ;
     } 
 
-    @Override
-    public Product findById(UUID id) throws IdNotFound {
+    
+    public Product findById(UUID id) throws IdNotFound,IllegalArgumentException {
         List<Product> list = stock.getProducts();
 
+        if (id == null) {
+            throw new IllegalArgumentException("id cannot be null");
+        }
         for (Product produto : list) {
             if(produto.getId() == id) {
                 return produto;
@@ -119,6 +117,7 @@ public class ServiceStock implements InterfaceCRUD<Product, UUID>{
     public ServiceStock(List<Product> products) {
         this.stock = new Stock(products);
     }
+
     //#endregion
    
     
