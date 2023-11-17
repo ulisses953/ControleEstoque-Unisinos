@@ -68,7 +68,11 @@ public class ServiceStock implements InterfaceCRUD<Product, UUID>{
         throw new IdNotFound("id not found id:" + id);
     }
     
-    public Integer findByIndex(UUID id) throws IdNotFound {
+    public Integer findByIndex(UUID id) throws IdNotFound,IllegalArgumentException {
+        if(id ==  null){
+            throw new IllegalArgumentException("id cannot be null");
+        }
+
         List<Product> list = stock.getProducts();
 
         for (int i = 0; i < list.size();i++) {
