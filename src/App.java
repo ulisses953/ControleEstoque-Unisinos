@@ -1,20 +1,12 @@
-import model.Config;
+import java.io.Serializable;
 
-public class App {
+import model.Produto;
+import model.Serialization;
+
+public class App implements Serializable {
     public static void main(String[] args) {
-        // Obter a instância Config
-        Config config = Config.getInstance();
-
-        System.out.println(config);
-
-        // Usar os métodos setter
-        config.setVersion("0.0.2");
-        config.setSerializeEverything(true);
-        // ...
-
-        System.out.println(config);
-
-        // Salvar as alterações
-        config.save();
+        Serialization<Produto> ser = new Serialization<>();
+        Produto p = new Produto();
+        ser.serialize(p);
     }
 }

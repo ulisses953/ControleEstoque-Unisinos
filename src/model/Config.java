@@ -2,25 +2,29 @@ package model;
 
 import java.io.*;
 
-public class Config implements Serializable {
+import interfaces.Serialize;
+
+public class Config implements Serialize<Config> {
+  public Serialization<Config> serialization = new Serialization<>();
   private static Config instance = null;
 
   private String version = "0.0.1";
-  private String serializedRoot = "..\\..\\serializedData\\";
+  private String serializedRoot = System.getProperty("user.dir") + "\\serializedData";
   private boolean serializeEverything = false;
   private boolean serializeStorage = false;
   private boolean serializeStorageInfo = false;
 
-  private Config() {}
+  private Config() {
+  }
 
   public static Config getInstance() {
     if (instance == null) {
       instance = new Config();
-    }    
+    }
     return instance;
   }
 
-  //#region get and set 
+  // #region get and set
   public String getVersion() {
     return version;
   }
@@ -60,12 +64,22 @@ public class Config implements Serializable {
   public void setSerializeStorageInfo(boolean serializeStorageInfo) {
     this.serializeStorageInfo = serializeStorageInfo;
   }
-  //#endregion
+  // #endregion
 
   @Override
   public String toString() {
     return "\t [CONFIG]:" + '\n'
         + "Version: " + version + '\n'
         + "Save Data Path :" + serializedRoot;
+  }
+
+  @Override
+  public void serialize(Config object) {
+    serialization.serialize(object);
+  }
+
+  @Override
+  public Config deserialize(Config object) {
+    return serialization.deserialize(object);
   }
 }
