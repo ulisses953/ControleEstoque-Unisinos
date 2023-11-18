@@ -103,11 +103,15 @@ public class ServiceStock implements InterfaceCRUD<Product, UUID>{
         return product;
     }
 
+    public boolean checkQuantity(Product product){
+        return (product.getQuantity() >= product.getMinimumQuantity());
+    }
+
     public List<Product> seeUnderstockedProducts(){
         List<Product> returnList = new ArrayList<Product>();
         final List<Product> LIST = stock.getProducts();
         for (Product product : LIST) {
-            if(product.getQuantity() < product.getMinimumQuantity()){
+            if(checkQuantity(product)){
                 returnList.add(product);
             }
         }
