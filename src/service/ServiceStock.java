@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import error.IdNotFound;
+import error.IdNotFoundException;
 import interfaces.InterfaceCRUD;
 import model.Stock;
 import model.Product;
@@ -13,12 +13,12 @@ public class ServiceStock implements InterfaceCRUD<Product, UUID>{
     private Stock stock;
   
     @Override
-    public Product update(Product object, UUID id) throws IdNotFound {
+    public Product update(Product object, UUID id) throws IdNotFoundException {
         final Integer INDEX = findByIndex(id); 
         List<Product> list = stock.getProducts();
 
         if (INDEX == null) {
-            throw new IdNotFound("id not found id:" + id);
+            throw new IdNotFoundException("id not found id:" + id);
         }
 
         list.add(INDEX, object);
@@ -29,7 +29,7 @@ public class ServiceStock implements InterfaceCRUD<Product, UUID>{
     }
 
     @Override
-    public Product update(Product object) throws IdNotFound {
+    public Product update(Product object) throws IdNotFoundException {
         return update(object, object.getId());
     }
 
@@ -44,12 +44,12 @@ public class ServiceStock implements InterfaceCRUD<Product, UUID>{
     }
 
     @Override
-    public Product delete(UUID id) throws IdNotFound  {
+    public Product delete(UUID id) throws IdNotFoundException  {
         final Product OBJ =  findById(id);
         List<Product> list = stock.getProducts();
 
         if (OBJ == null) {
-            throw new IdNotFound("id not found id:" + id);
+            throw new IdNotFoundException("id not found id:" + id);
         }
 
         list.remove(OBJ);
@@ -60,7 +60,7 @@ public class ServiceStock implements InterfaceCRUD<Product, UUID>{
     } 
 
     @Override
-    public Product findById(UUID id) throws IdNotFound {
+    public Product findById(UUID id) throws IdNotFoundException {
         List<Product> list = stock.getProducts();
 
         for (Product produto : list) {
@@ -68,10 +68,10 @@ public class ServiceStock implements InterfaceCRUD<Product, UUID>{
                 return produto;
             }
         }
-        throw new IdNotFound("id not found id:" + id);
+        throw new IdNotFoundException("id not found id:" + id);
     }
     
-    public Integer findByIndex(UUID id) throws IdNotFound {
+    public Integer findByIndex(UUID id) throws IdNotFoundException {
         List<Product> list = stock.getProducts();
 
         for (int i = 0; i < list.size();i++) {
@@ -79,14 +79,14 @@ public class ServiceStock implements InterfaceCRUD<Product, UUID>{
                 return i;
             }
         }
-        throw new IdNotFound("id not found id:" + id);
+        throw new IdNotFoundException("id not found id:" + id);
     }
     
     public List<Product> findAll() {
         return stock.getProducts();
     }
 
-    public Product addToStock(UUID id, int amount) throws IdNotFound {
+    public Product addToStock(UUID id, int amount) throws IdNotFoundException {
         if (amount < 0) return null;
         Product product = findById(id);
         amount += product.getQuantity();
@@ -94,7 +94,7 @@ public class ServiceStock implements InterfaceCRUD<Product, UUID>{
         return product;
     }
 
-    public Product removeFromStock(UUID id, int amount) throws IdNotFound {
+    public Product removeFromStock(UUID id, int amount) throws IdNotFoundException {
         Product product = findById(id);
         if (amount > 0) amount *= -1;
         amount += product.getQuantity();
@@ -102,16 +102,26 @@ public class ServiceStock implements InterfaceCRUD<Product, UUID>{
         product.setQuantity(amount);
         return product;
     }
-
-    public boolean checkQuantity(Product product){
-        return (product.getQuantity() >= product.getMinimumQuantity());
+    /**
+     * 
+     * @param product
+     * @return true if understocked, false otherwise
+     */
+    public boolean isLowOnStock(Product product){
+        if(product == null){
+            throw new IllegalArgumentException("product is null");
+        }
+        return (product.getQuantity() < product.getMinimumQuantity());
     }
-
-    public List<Product> seeUnderstockedProducts(){
+    /**
+     * 
+     * @return List of understocked products
+     */
+    public List<Product> seeLowOnStockProducts(){
         List<Product> returnList = new ArrayList<Product>();
         final List<Product> LIST = stock.getProducts();
         for (Product product : LIST) {
-            if(checkQuantity(product)){
+            if(isLowOnStock(product)){
                 returnList.add(product);
             }
         }
