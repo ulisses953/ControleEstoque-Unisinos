@@ -2,12 +2,12 @@ package model;
 
 import java.io.*;
 
-import interfaces.Serialize;
+import interfaces.SerializableOperations;
 
-public class Serialization<T> implements Serialize<T> {
+public class SerializableManager <T> implements SerializableOperations<T> {
   private Config config = Config.getInstance();
 
-  public Serialization() {
+  public SerializableManager () {
   }
 
   public void serialize(T o) {
