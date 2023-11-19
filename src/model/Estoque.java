@@ -3,10 +3,9 @@ package model;
 import java.util.List;
 import java.util.UUID;
 
-public class Estoque {
+public class Estoque extends AbstractSerializableObject<Estoque>{
     private UUID id = UUID.randomUUID();
     private List<Produto> produtos;
-
     
     //#region get and set 
     public UUID getId() {
@@ -31,5 +30,5 @@ public class Estoque {
 
     }
     //#endregion
-    
+
 }

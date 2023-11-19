@@ -1,11 +1,6 @@
 package model;
 
-import java.io.*;
-
-import interfaces.Serialize;
-
-public class Config implements Serialize<Config> {
-  public Serialization<Config> serialization = new Serialization<>();
+public class Config extends AbstractSerializableObject<Config> {
   private static Config instance = null;
 
   private String version = "0.0.1";
@@ -71,15 +66,5 @@ public class Config implements Serialize<Config> {
     return "\t [CONFIG]:" + '\n'
         + "Version: " + version + '\n'
         + "Save Data Path :" + serializedRoot;
-  }
-
-  @Override
-  public void serialize(Config object) {
-    serialization.serialize(object);
-  }
-
-  @Override
-  public Config deserialize(Config object) {
-    return serialization.deserialize(object);
   }
 }

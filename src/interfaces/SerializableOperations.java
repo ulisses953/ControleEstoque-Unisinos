@@ -6,4 +6,6 @@ public interface SerializableOperations<T> extends Serializable {
   void serialize(T object);
 
   T deserialize(T object);
+
+  void removeSerialization(T object);
 }
