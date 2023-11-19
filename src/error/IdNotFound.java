@@ -1,6 +1,6 @@
 package error;
 
-public class IdNotFound extends RuntimeException{
+public class IdNotFound extends Exception{
     
 
     public IdNotFound(String message) {
