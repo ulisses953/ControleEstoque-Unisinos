@@ -7,21 +7,20 @@ public abstract class AbstractSerializableObject<T> implements SerializableObjec
   private SerializableManager<T> manager = null;
 
   private SerializableManager<T> getManager() {
-    if(manager == null) {
+    if (manager == null) {
       return manager = new SerializableManager<T>();
     }
     return manager;
   }
 
   public void saveObject() {
-    SerializableManager<T> manager = new SerializableManager<T>();
-    manager.serialize((T) this);
+    getManager().serialize((T) this);
   }
 
   public T getSerializedObject() {
     return getManager().deserialize((T) this);
   }
-  
+
   public void deleteSave() {
     getManager().removeSerialization((T) this);
   }
