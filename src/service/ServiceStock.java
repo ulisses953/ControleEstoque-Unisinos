@@ -35,6 +35,10 @@ public class ServiceStock implements InterfaceCRUD<Product, UUID>{
 
     @Override
     public Product save(Product object) {
+        if (object == null) {
+            throw new IllegalArgumentException("object cannot be null");
+        }
+        
         List<Product> list = stock.getProducts();
         list.add(object);
 
@@ -61,6 +65,10 @@ public class ServiceStock implements InterfaceCRUD<Product, UUID>{
 
     @Override
     public Product findById(UUID id) throws IdNotFoundException {
+        if (id == null) {
+            throw new IllegalArgumentException("id cannot be null");    
+        }
+        
         List<Product> list = stock.getProducts();
 
         for (Product produto : list) {
@@ -72,6 +80,10 @@ public class ServiceStock implements InterfaceCRUD<Product, UUID>{
     }
     
     public Integer findByIndex(UUID id) throws IdNotFoundException {
+        if (id == null) {
+            throw new IllegalArgumentException("id is null");
+        }
+        
         List<Product> list = stock.getProducts();
 
         for (int i = 0; i < list.size();i++) {

@@ -6,7 +6,6 @@ import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.spy;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Stack;
 import java.util.UUID;
@@ -215,15 +214,47 @@ public class ServiceStockTest {
         assertEquals(false, serviceStock.isLowOnStock(p1));
     }
 
-     @Test
+    @Test
     public void testIsLowOnStockProductIsNull(){
         
         ServiceStock serviceStock = new ServiceStock(new ArrayList<Product>());
         
         assertThrows(IllegalArgumentException.class, () -> {
             serviceStock.isLowOnStock(null);
+            
         });
     }
 
+    @Test   
+    public void seeLowOnStockProductsTrue(){
+        ArrayList<Product> list = new ArrayList<Product>();
+        Product p1 = new Product("ps5", "ps5",5000,0,3);
+        list.add(p1);
+        ServiceStock stock = new ServiceStock(list);
+
+        assertEquals(list, stock.seeLowOnStockProducts());
+    }
+
+    @Test   
+    public void seeLowOnStockProductsFalse(){
+        ArrayList<Product> list = new ArrayList<Product>();
+        Product p1 = new Product("ps5", "ps5",5000,10,3);
+        list.add(p1);
+        ServiceStock stock = new ServiceStock(list);
+
+        assertEquals(new ArrayList(), stock.seeLowOnStockProducts());
+    }
+
+    @Test   
+    public void seeLowOnStockProductsProductIsNull(){
+        ArrayList<Product> list = new ArrayList<Product>();
+        Product p1 = new Product();
+        list.add(p1);
+        ServiceStock stock = new ServiceStock(list);
+
+        assertEquals(new ArrayList(), stock.seeLowOnStockProducts());
+    }
+
+    
     
 }
