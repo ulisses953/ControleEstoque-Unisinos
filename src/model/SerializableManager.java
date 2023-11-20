@@ -5,18 +5,20 @@ import java.io.*;
 import interfaces.SerializableOperations;
 
 public class SerializableManager<T> implements SerializableOperations<T> {
-  private Config config = Config.getInstance();
-
   public SerializableManager () {
   }
 
+  private Config getConfig() {
+    return Config.getInstance();
+  }
+
   private String getFilePath(T object) {
-    return config.getSerializedRoot() + "\\" + object.getClass().getName() + ".ser";
+    return getConfig().getSerializedRoot() + "\\" + object.getClass().getName() + ".ser";
   }
 
   public void serialize(T object) {
     try {
-      File directory = new File(config.getSerializedRoot());
+      File directory = new File(getConfig().getSerializedRoot());
       if (!directory.exists()) {
         directory.mkdir();
       }
@@ -44,6 +46,24 @@ public class SerializableManager<T> implements SerializableOperations<T> {
       if (o.getClass().isInstance(obj)) {
         o = (T) obj;
       }
+      in.close();
+      fileIn.close();
+    } catch (IOException i) {
+      i.printStackTrace();
+    } catch (ClassNotFoundException e) {
+      e.printStackTrace();
+    }
+    return o;
+  }
+
+  @SuppressWarnings("unchecked")
+  public T deserializeByName(String className) {
+    T o = null;
+    try {
+      String path = System.getProperty("user.dir") + "\\serializedData\\" + className + ".ser";
+      FileInputStream fileIn = new FileInputStream(path);
+      ObjectInputStream in = new ObjectInputStream(fileIn);
+      o = (T) in.readObject();
       in.close();
       fileIn.close();
     } catch (IOException i) {

@@ -17,7 +17,7 @@ public abstract class AbstractSerializableObject<T> implements SerializableObjec
     getManager().serialize((T) this);
   }
 
-  public T getObject() {
+  public T getSerializedObject() {
     return getManager().deserialize((T) this);
   }
   

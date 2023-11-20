@@ -5,7 +5,7 @@ import java.io.Serializable;
 public interface SerializableObject<T> extends Serializable {
   void saveObject();
   
-  T getObject();
+  T getSerializedObject();
 
   void deleteSave();
 }

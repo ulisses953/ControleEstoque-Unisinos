@@ -59,8 +59,18 @@ public class Product extends AbstractSerializableObject<Product> {
         this.minimumQuantity = minimumQuantity;
     }
 
+    public Product(boolean configSaveProduct) {
+        if(configSaveProduct) {
+            Product oldProduct = getSerializedObject();
+            this.name = oldProduct.getName();
+            this.description = oldProduct.getDescription();
+            this.price = oldProduct.getPrice();
+            this.quantity = oldProduct.getQuantity();
+            this.minimumQuantity = oldProduct.getMinimumQuantity();
+        }
+    }
+
     public Product(){
-        
     }
 
     //#endregion

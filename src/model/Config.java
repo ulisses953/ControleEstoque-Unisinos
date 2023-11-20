@@ -1,5 +1,7 @@
 package model;
 
+import java.io.File;
+
 public class Config extends AbstractSerializableObject<Config> {
   private static Config instance = null;
 
@@ -10,12 +12,33 @@ public class Config extends AbstractSerializableObject<Config> {
   private boolean serializeStorageInfo = false;
 
   private Config() {
+    desserializeConfig();
+    instance.saveObject();
+  }
+  
+  private void desserializeConfig() {
+    File arquivo = new File(this.serializedRoot + "\\" +  Config.class.getName() + ".ser");
+    if (arquivo.exists()) {
+      Config serializedConfig = new SerializableManager<Config>().deserializeByName(Config.class.getName());
+      if (serializedConfig != null) {
+        copyValuesFrom(serializedConfig);
+      }
+    }
+    instance = this;
+  }
+
+  private void copyValuesFrom(Config config) {
+    this.version = config.version;
+    this.serializedRoot = config.serializedRoot;
+    this.serializeEverything = config.serializeEverything;
+    this.serializeStorage = config.serializeStorage;
+    this.serializeStorageInfo = config.serializeStorageInfo;
   }
 
   public static Config getInstance() {
-    if (instance == null) {
+    if(instance == null)
       instance = new Config();
-    }
+
     return instance;
   }
 
@@ -63,8 +86,9 @@ public class Config extends AbstractSerializableObject<Config> {
 
   @Override
   public String toString() {
-    return "\t [CONFIG]:" + '\n'
-        + "Version: " + version + '\n'
-        + "Save Data Path :" + serializedRoot;
+    return "Config [version=" + version + ", serializedRoot=" + serializedRoot + ", serializeEverything="
+        + serializeEverything + ", serializeStorage=" + serializeStorage + ", serializeStorageInfo="
+        + serializeStorageInfo + "]";
   }
+
 }

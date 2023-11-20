@@ -27,8 +27,16 @@ public class Stock extends AbstractSerializableObject<Stock>{
     public Stock(List<Product> produtos) {
         this.products = produtos;
     }
-    public Stock() {
 
+    public Stock(boolean configSaveStock) {
+        if(configSaveStock) {
+            Stock oldStock = getSerializedObject();
+            this.id = oldStock.getId();
+            this.products = oldStock.getProducts();
+        }
+    }
+
+    public Stock() {
     }
     //#endregion
 
