@@ -8,13 +8,14 @@ public abstract class AbstractSerializableObject<T> implements SerializableObjec
 
   private SerializableManager<T> getManager() {
     if(manager == null) {
-      return manager = new SerializableManager<>();
+      return manager = new SerializableManager<T>();
     }
     return manager;
   }
 
   public void saveObject() {
-    getManager().serialize((T) this);
+    SerializableManager<T> manager = new SerializableManager<T>();
+    manager.serialize((T) this);
   }
 
   public T getSerializedObject() {

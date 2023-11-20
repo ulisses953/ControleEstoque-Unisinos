@@ -1,5 +1,6 @@
 package model;
 
+import java.io.File;
 import java.util.UUID;
 
 public class Product extends AbstractSerializableObject<Product> {
@@ -59,8 +60,10 @@ public class Product extends AbstractSerializableObject<Product> {
         this.minimumQuantity = minimumQuantity;
     }
 
-    public Product(boolean configSaveProduct) {
-        if(configSaveProduct) {
+    public Product(){
+        Config config = Config.getInstance();
+        File arquivo = new File(config.getSerializeRootPath() + "\\" +  this.getClass().getName() + ".ser");
+        if (arquivo.exists() && config.isSerializeEverything()) {
             Product oldProduct = getSerializedObject();
             this.name = oldProduct.getName();
             this.description = oldProduct.getDescription();
@@ -70,10 +73,5 @@ public class Product extends AbstractSerializableObject<Product> {
         }
     }
 
-    public Product(){
-    }
-
     //#endregion
-    
-
 }

@@ -1,40 +1,21 @@
 package model;
 
-import java.io.File;
+import java.io.*;
 
 public class Config extends AbstractSerializableObject<Config> {
-  private static Config instance = null;
+  private static Config instance = new Config();
+  private static final long serialVersionUID = 1L;
 
   private String version = "0.0.1";
-  private String serializedRoot = System.getProperty("user.dir") + "\\serializedData";
+  private String serializeRootPath = System.getProperty("user.dir") + "\\serializedData";
   private boolean serializeEverything = false;
-  private boolean serializeStorage = false;
-  private boolean serializeStorageInfo = false;
+  private boolean serializedStock = false;
 
   private Config() {
     desserializeConfig();
     instance.saveObject();
   }
   
-  private void desserializeConfig() {
-    File arquivo = new File(this.serializedRoot + "\\" +  Config.class.getName() + ".ser");
-    if (arquivo.exists()) {
-      Config serializedConfig = new SerializableManager<Config>().deserializeByName(Config.class.getName());
-      if (serializedConfig != null) {
-        copyValuesFrom(serializedConfig);
-      }
-    }
-    instance = this;
-  }
-
-  private void copyValuesFrom(Config config) {
-    this.version = config.version;
-    this.serializedRoot = config.serializedRoot;
-    this.serializeEverything = config.serializeEverything;
-    this.serializeStorage = config.serializeStorage;
-    this.serializeStorageInfo = config.serializeStorageInfo;
-  }
-
   public static Config getInstance() {
     if(instance == null)
       instance = new Config();
@@ -51,12 +32,12 @@ public class Config extends AbstractSerializableObject<Config> {
     this.version = version;
   }
 
-  public String getSerializedRoot() {
-    return serializedRoot;
+  public String getSerializeRootPath() {
+    return serializeRootPath;
   }
 
-  public void setSerializedRoot(String serializedRoot) {
-    this.serializedRoot = serializedRoot;
+  public void setSerializeRootPath(String serializedRoot) {
+    this.serializeRootPath = serializedRoot;
   }
 
   public boolean isSerializeEverything() {
@@ -67,28 +48,54 @@ public class Config extends AbstractSerializableObject<Config> {
     this.serializeEverything = serializeEverything;
   }
 
-  public boolean isSerializeStorage() {
-    return serializeStorage;
+  public boolean isSerializeStock() {
+    return serializedStock;
   }
-
-  public void setSerializeStorage(boolean serializeStorage) {
-    this.serializeStorage = serializeStorage;
-  }
-
-  public boolean isSerializeStorageInfo() {
-    return serializeStorageInfo;
-  }
-
-  public void setSerializeStorageInfo(boolean serializeStorageInfo) {
-    this.serializeStorageInfo = serializeStorageInfo;
+  
+  public void setSerializeStock(boolean serializeStorage) {
+    this.serializedStock = serializeStorage;
   }
   // #endregion
+  
+  private void desserializeConfig() {
+    File arquivo = new File(this.serializeRootPath + "\\" +  Config.class.getName() + ".ser");
+    if (arquivo.exists()) {
+      Config serializedConfig = this.getSerializedObject();
+      if (serializedConfig != null) {
+        copyValuesFrom(serializedConfig);
+      }
+    }
+    instance = this;
+  }
+  
+  private void copyValuesFrom(Config config) {
+    this.version = config.version;
+    this.serializeRootPath = config.serializeRootPath;
+    this.serializeEverything = config.serializeEverything;
+    this.serializedStock = config.serializedStock;
+  }
+
+  @Override
+  public Config getSerializedObject() {
+    Config obj = null;
+    try {
+      String path = serializeRootPath + "\\" + this.getClass().getName() + ".ser";
+      FileInputStream fileIn = new FileInputStream(path);
+      ObjectInputStream in = new ObjectInputStream(fileIn);
+      obj = (Config) in.readObject();
+      in.close();
+      fileIn.close();
+    } catch (IOException i) {
+      i.printStackTrace();
+    } catch (ClassNotFoundException e) {
+      e.printStackTrace();
+    }
+    return obj;
+  }
 
   @Override
   public String toString() {
-    return "Config [version=" + version + ", serializedRoot=" + serializedRoot + ", serializeEverything="
-        + serializeEverything + ", serializeStorage=" + serializeStorage + ", serializeStorageInfo="
-        + serializeStorageInfo + "]";
+    return "Config [version=" + version + ", serializedRoot=" + serializeRootPath + ", serializeEverything="
+        + serializeEverything + ", serializeStorage=" + serializedStock + "]";
   }
-
 }
