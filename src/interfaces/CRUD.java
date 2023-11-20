@@ -5,7 +5,7 @@ import java.util.UUID;
 
 public interface CRUD<T, ID> {
 
-    public T update(T object, UUID id) throws Exception;
+    public T update(T object, UUID id) throws Exception ;
 
     public T update(T object) throws Exception;
 
