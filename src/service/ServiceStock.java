@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.UUID;
 
 import error.IdNotFoundException;
-import interfaces.InterfaceCRUD;
+import interfaces.CRUD;
 import model.Stock;
 import model.Product;
 
