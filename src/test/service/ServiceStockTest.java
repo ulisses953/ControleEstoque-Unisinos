@@ -1,4 +1,4 @@
-package test;
+package test.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -7,11 +7,12 @@ import static org.mockito.Mockito.spy;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 import java.util.UUID;
 
 import org.junit.Test;
 
-import error.IdNotFound;
+import error.IdNotFoundException;
 import model.Product;
 import service.ServiceStock;
 
@@ -56,7 +57,7 @@ public class ServiceStockTest {
     }
 
     @Test
-    public void testFindByIdIllegalArgumentException() throws IllegalArgumentException, IdNotFound {
+    public void testFindByIdIllegalArgumentException() throws IllegalArgumentException, IdNotFoundException {
         
         ServiceStock stock = new ServiceStock(new ArrayList<>());
 
@@ -67,11 +68,11 @@ public class ServiceStockTest {
     }
 
     @Test
-    public void testFindByIdIdNotFound() throws IllegalArgumentException, IdNotFound {
+    public void testFindByIdIdNotFound() throws IllegalArgumentException, IdNotFoundException {
         
-        ServiceStock stock = new ServiceStock(new ArrayList<>());
+        ServiceStock stock = new ServiceStock(new Stack<Product>());
 
-        assertThrows(IdNotFound.class, () -> {
+        assertThrows(IdNotFoundException.class, () -> {
             stock.findById(UUID.randomUUID());
         });
     }
@@ -106,7 +107,7 @@ public class ServiceStockTest {
         list.add(p1);
         ServiceStock stock = new ServiceStock(list);
 
-        assertThrows(IdNotFound.class, () ->{
+        assertThrows(IdNotFoundException.class, () ->{
             stock.findByIndex(UUID.randomUUID());
         });
         
@@ -146,7 +147,7 @@ public class ServiceStockTest {
     }
 
     @Test
-    public void addToStock() throws IllegalArgumentException, IdNotFound {
+    public void addToStock() throws IllegalArgumentException, IdNotFoundException {
         Product p1 = new Product("ps5", "ps5",5000,1,1);
         ServiceStock stock = new ServiceStock(new ArrayList<Product>());
 
@@ -157,7 +158,7 @@ public class ServiceStockTest {
         assertEquals(p1.getQuantity() + 10, spyStock.addToStock(p1.getId(), 10).getQuantity());
     }
     @Test
-    public void addToStockNegativenumber() throws IllegalArgumentException, IdNotFound {
+    public void addToStockNegativenumber() throws IllegalArgumentException, IdNotFoundException {
         Product p1 = new Product("ps5", "ps5",5000,1,1);
         ServiceStock stock = new ServiceStock(new ArrayList<Product>());
 
@@ -169,7 +170,7 @@ public class ServiceStockTest {
     }
 
     @Test
-    public void removeFromStockNegativeNunber() throws IdNotFound {
+    public void removeFromStockNegativeNunber() throws IdNotFoundException {
 
         Product p1 = new Product("ps5", "ps5",5000,2,1);
         ServiceStock stock = new ServiceStock(new ArrayList<Product>());
@@ -183,7 +184,7 @@ public class ServiceStockTest {
 
     }
     @Test
-    public void removeFromStockPositiveNunber() throws IdNotFound {
+    public void testRemoveFromStockPositiveNunber() throws IdNotFoundException {
 
         Product p1 = new Product("ps5", "ps5",5000,2,1);
         ServiceStock stock = new ServiceStock(new ArrayList<Product>());
@@ -196,4 +197,64 @@ public class ServiceStockTest {
 
 
     }
+    @Test
+    public void testIsLowOnStockTrue(){
+        Product p1 = new Product("ps5", "ps5",5000,2,5);
+        ServiceStock serviceStock = new ServiceStock(new ArrayList<Product>());
+        
+        assertEquals(true, serviceStock.isLowOnStock(p1));
+
+    }
+
+    @Test
+    public void testIsLowOnStockFalse(){
+        Product p1 = new Product("ps5", "ps5",5000,2,1);
+        ServiceStock serviceStock = new ServiceStock(new ArrayList<Product>());
+        
+        assertEquals(false, serviceStock.isLowOnStock(p1));
+    }
+
+    @Test
+    public void testIsLowOnStockProductIsNull(){
+        
+        ServiceStock serviceStock = new ServiceStock(new ArrayList<Product>());
+        
+        assertThrows(IllegalArgumentException.class, () -> {
+            serviceStock.isLowOnStock(null);
+            
+        });
+    }
+
+    @Test   
+    public void seeLowOnStockProductsTrue(){
+        ArrayList<Product> list = new ArrayList<Product>();
+        Product p1 = new Product("ps5", "ps5",5000,0,3);
+        list.add(p1);
+        ServiceStock stock = new ServiceStock(list);
+
+        assertEquals(list, stock.seeLowOnStockProducts());
+    }
+
+    @Test   
+    public void seeLowOnStockProductsFalse(){
+        ArrayList<Product> list = new ArrayList<Product>();
+        Product p1 = new Product("ps5", "ps5",5000,10,3);
+        list.add(p1);
+        ServiceStock stock = new ServiceStock(list);
+
+        assertEquals(new ArrayList(), stock.seeLowOnStockProducts());
+    }
+
+    @Test   
+    public void seeLowOnStockProductsProductIsNull(){
+        ArrayList<Product> list = new ArrayList<Product>();
+        Product p1 = new Product();
+        list.add(p1);
+        ServiceStock stock = new ServiceStock(list);
+
+        assertEquals(new ArrayList(), stock.seeLowOnStockProducts());
+    }
+
+    
+    
 }
