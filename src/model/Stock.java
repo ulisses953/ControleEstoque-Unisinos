@@ -1,5 +1,6 @@
 package model;
 
+import java.io.File;
 import java.util.List;
 import java.util.UUID;
 
@@ -28,16 +29,18 @@ public class Stock extends AbstractSerializableObject<Stock>{
         this.products = produtos;
     }
 
-    public Stock(boolean configSaveStock) {
-        if(configSaveStock) {
-            Stock oldStock = getSerializedObject();
-            this.id = oldStock.getId();
-            this.products = oldStock.getProducts();
+    public Stock() {
+        Config config = Config.getInstance();
+        File arquivo = new File(config.getSerializeRootPath() + "\\" +  this.getClass().getName() + ".ser");
+        if (arquivo.exists() && (config.isSerializeEverything() || config.isSerializeStock())) {
+            Stock serializedStock = getSerializedObject();
+            this.id = serializedStock.getId();
+            this.products = serializedStock.getProducts();
+        }
+        
+        if(config.isSerializeEverything() || config.isSerializeStock()) {
+            this.saveObject();
         }
     }
-
-    public Stock() {
-    }
     //#endregion
-
 }
