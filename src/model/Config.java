@@ -3,7 +3,7 @@ package model;
 import java.io.*;
 
 public class Config extends AbstractSerializableObject<Config> {
-  private static Config instance = new Config();
+  private static Config instance = null;
   private static final long serialVersionUID = 1L;
 
   private String version = "0.0.1";
@@ -19,7 +19,6 @@ public class Config extends AbstractSerializableObject<Config> {
   public static Config getInstance() {
     if(instance == null)
       instance = new Config();
-
     return instance;
   }
 
