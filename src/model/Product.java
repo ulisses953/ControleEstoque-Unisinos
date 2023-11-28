@@ -3,7 +3,9 @@ package model;
 import java.io.File;
 import java.util.UUID;
 
-public class Product extends AbstractSerializableObject<Product> {
+import interfaces.SaveableObject;
+
+public class Product implements SaveableObject<Product> {
     private UUID id = UUID.randomUUID();
     private String name;
     private String description;
@@ -64,7 +66,7 @@ public class Product extends AbstractSerializableObject<Product> {
         Config config = Config.getInstance();
         File arquivo = new File(config.getSerializeRootPath() + "\\" +  this.getClass().getName() + ".ser");
         if (arquivo.exists() && config.isSerializeEverything()) {
-            Product oldProduct = getSerializedObject();
+            Product oldProduct = getSavedObject();
             this.name = oldProduct.getName();
             this.description = oldProduct.getDescription();
             this.price = oldProduct.getPrice();

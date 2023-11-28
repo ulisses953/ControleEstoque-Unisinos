@@ -4,7 +4,9 @@ import java.io.File;
 import java.util.List;
 import java.util.UUID;
 
-public class Stock extends AbstractSerializableObject<Stock>{
+import interfaces.SaveableObject;
+
+public class Stock implements SaveableObject<Stock>{
     private UUID id = UUID.randomUUID();
     private List<Product> products;
 
@@ -33,7 +35,7 @@ public class Stock extends AbstractSerializableObject<Stock>{
         Config config = Config.getInstance();
         File arquivo = new File(config.getSerializeRootPath() + "\\" +  this.getClass().getName() + ".ser");
         if (arquivo.exists() && (config.isSerializeEverything() || config.isSerializeStock())) {
-            Stock serializedStock = getSerializedObject();
+            Stock serializedStock = getSavedObject();
             this.id = serializedStock.getId();
             this.products = serializedStock.getProducts();
         }

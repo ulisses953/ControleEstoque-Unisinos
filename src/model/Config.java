@@ -1,8 +1,12 @@
 package model;
 
 import java.io.*;
+import java.lang.reflect.Field;
+import java.util.Properties;
 
-public class Config extends AbstractSerializableObject<Config> {
+import interfaces.SaveableObject;
+
+public class Config implements SaveableObject<Config> {
   private static Config instance = new Config();
   private static final long serialVersionUID = 1L;
 
@@ -60,7 +64,7 @@ public class Config extends AbstractSerializableObject<Config> {
   private void desserializeConfig() {
     File arquivo = new File(this.serializeRootPath + "\\" +  Config.class.getName() + ".ser");
     if (arquivo.exists()) {
-      Config serializedConfig = this.getSerializedObject();
+      Config serializedConfig = this.getSavedObject();
       if (serializedConfig != null) {
         copyValuesFrom(serializedConfig);
       }
@@ -76,7 +80,7 @@ public class Config extends AbstractSerializableObject<Config> {
   }
 
   @Override
-  public Config getSerializedObject() {
+  public Config getSavedObject() {
     Config obj = null;
     try {
       String path = serializeRootPath + "\\" + this.getClass().getName() + ".ser";
@@ -91,6 +95,27 @@ public class Config extends AbstractSerializableObject<Config> {
       e.printStackTrace();
     }
     return obj;
+  }
+
+  @Override
+  public void saveObject() {
+    try {
+      Properties properties = new Properties();
+      FileOutputStream outputStream = new FileOutputStream(System.getProperty("user.dir") + "\\config\\dataConfig.properties");
+      Field[] fields = this.getClass().getDeclaredFields();
+
+      for(Field field : fields) {
+        if(field.getName() == "serialVersionUID" || field.getName() == "instance") continue;
+
+        field.setAccessible(true);
+        Object value = field.get(this);
+        properties.put(field.getName(), value.toString());
+      }
+
+      properties.store(outputStream, null);
+    } catch(Exception e){
+      System.out.println(e.fillInStackTrace());
+    }
   }
 
   @Override
