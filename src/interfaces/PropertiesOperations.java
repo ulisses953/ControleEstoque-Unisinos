@@ -1,7 +1,7 @@
 package interfaces;
 
 public interface PropertiesOperations<T> {
-  T getObjectWithSavedProps();
+  T getPropsObject();
 
   void saveProps();
 

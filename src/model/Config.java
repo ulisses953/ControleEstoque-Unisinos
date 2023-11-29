@@ -9,7 +9,7 @@ import interfaces.SerializableObject;
 
 public class Config implements PropertiesOperations<Config>, SerializableObject<Config> {
   private static Config instance = new Config();
-  private static final String PROPS_PATH = System.getProperty("user.dir") + "\\config\\";
+  private final String PROPS_PATH = System.getProperty("user.dir") + "\\config\\";
   private static final long serialVersionUID = 1L;
 
   private String version = "0.0.1";
@@ -18,7 +18,7 @@ public class Config implements PropertiesOperations<Config>, SerializableObject<
   private boolean serializedStock = false;
 
   private Config() {
-    getObjectWithSavedProps();
+    instance = getPropsObject();
   }
   
   public static Config getInstance() {
@@ -62,7 +62,7 @@ public class Config implements PropertiesOperations<Config>, SerializableObject<
   // #endregion
 
   @Override
-  public Config getObjectWithSavedProps() {
+  public Config getPropsObject() {
     try {
       Properties properties = new Properties();
       FileInputStream inputStream = new FileInputStream(PROPS_PATH + "dataConfig.properties");
@@ -195,6 +195,10 @@ public class Config implements PropertiesOperations<Config>, SerializableObject<
     return obj;
   }
   
+  public static void resetInstance() {
+    instance = new Config();
+  }
+
   @Override
   public String toString() {
     return "Config [version=" + version + 
@@ -202,5 +206,4 @@ public class Config implements PropertiesOperations<Config>, SerializableObject<
         ", serializeEverything=" + serializeEverything +
         ", serializeStorage=" + serializedStock + "]";
   }
-
 }
