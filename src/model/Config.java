@@ -28,11 +28,16 @@ public class Config implements PropertiesOperations<Config>, SerializableObject<
   }
 
   // #region get and set
+  public static long getSerialversionuid() {
+    return serialVersionUID;
+  }
+
   public String getVersion() {
     return version;
   }
 
   public void setVersion(String version) {
+    setPropObject("version", version);
     this.version = version;
   }
 
@@ -41,6 +46,7 @@ public class Config implements PropertiesOperations<Config>, SerializableObject<
   }
 
   public void setSerializeRootPath(String serializedRoot) {
+    setPropObject("serializeRootPath", serializedRoot);
     this.serializeRootPath = serializedRoot;
   }
 
@@ -49,6 +55,7 @@ public class Config implements PropertiesOperations<Config>, SerializableObject<
   }
 
   public void setSerializeEverything(boolean serializeEverything) {
+    setPropObject("serializeEverything", Boolean.toString(serializeEverything));
     this.serializeEverything = serializeEverything;
   }
 
@@ -57,6 +64,7 @@ public class Config implements PropertiesOperations<Config>, SerializableObject<
   }
   
   public void setSerializeStock(boolean serializeStorage) {
+    setPropObject("serializedStock", Boolean.toString(serializeStorage));
     this.serializedStock = serializeStorage;
   }
   // #endregion
@@ -116,8 +124,8 @@ public class Config implements PropertiesOperations<Config>, SerializableObject<
       for(Field field : fields) {
         String fieldName = field.getName();
 
-        boolean ignoredFields = fieldName.equals("serialVersionUID") || 
-                                fieldName.equals("instance") || 
+        boolean ignoredFields = fieldName.equals("serialVersionUID") ||
+                                fieldName.equals("instance") ||
                                 fieldName.equals("propertiesPath");
         if(ignoredFields) continue;
 
@@ -196,7 +204,7 @@ public class Config implements PropertiesOperations<Config>, SerializableObject<
   }
   
   public static void resetInstance() {
-    instance = new Config();
+    instance = null;
   }
 
   @Override
