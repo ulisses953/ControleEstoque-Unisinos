@@ -5,7 +5,7 @@ import java.io.Serializable;
 import model.SerializableManager;
 
 @SuppressWarnings("unchecked")
-public interface SaveableObject<T> extends Serializable {
+public interface SerializableObject<T> extends Serializable {
 
   default SerializableManager<T> getManager() {
     return new SerializableManager<T>();

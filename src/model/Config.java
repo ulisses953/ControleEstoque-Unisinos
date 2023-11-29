@@ -4,10 +4,12 @@ import java.io.*;
 import java.lang.reflect.Field;
 import java.util.Properties;
 
-import interfaces.SaveableObject;
+import interfaces.PropertiesOperations;
+import interfaces.SerializableObject;
 
-public class Config implements SaveableObject<Config> {
+public class Config implements PropertiesOperations<Config>, SerializableObject<Config> {
   private static Config instance = new Config();
+  private static final String PROPS_PATH = System.getProperty("user.dir") + "\\config\\";
   private static final long serialVersionUID = 1L;
 
   private String version = "0.0.1";
@@ -16,8 +18,7 @@ public class Config implements SaveableObject<Config> {
   private boolean serializedStock = false;
 
   private Config() {
-    desserializeConfig();
-    instance.saveObject();
+    getObjectWithSavedProps();
   }
   
   public static Config getInstance() {
@@ -60,26 +61,90 @@ public class Config implements SaveableObject<Config> {
     this.serializedStock = serializeStorage;
   }
   // #endregion
-  
-  private void desserializeConfig() {
-    File arquivo = new File(this.serializeRootPath + "\\" +  Config.class.getName() + ".ser");
-    if (arquivo.exists()) {
-      Config serializedConfig = this.getSavedObject();
-      if (serializedConfig != null) {
-        copyValuesFrom(serializedConfig);
+
+  @Override
+  public Config getObjectWithSavedProps() {
+    try {
+      Properties properties = new Properties();
+      FileInputStream inputStream = new FileInputStream(PROPS_PATH + "dataConfig.properties");
+
+      properties.load(inputStream);
+
+      Field[] fields = this.getClass().getDeclaredFields();
+
+      for(Field field : fields) {
+        String fieldName = field.getName();
+
+        boolean ignoredFields = fieldName.equals("serialVersionUID") || 
+                                fieldName.equals("instance") || 
+                                fieldName.equals("propertiesPath");
+        if(ignoredFields) continue;
+
+        field.setAccessible(true);
+        String value = properties.getProperty(fieldName);
+
+        if (field.getType() == boolean.class) {
+          field.set(this, Boolean.parseBoolean(value));
+        } else if (field.getType() == int.class) {
+          field.set(this, Integer.parseInt(value));
+        } else if (field.getType() == double.class) {
+          field.set(this, Double.parseDouble(value));
+        } else {
+          field.set(this, value);
+        }
       }
+      inputStream.close();
+    } catch (FileNotFoundException fileNotFoundException) {
+      saveProps();
+    } catch(Exception e) {
+      e.printStackTrace();
     }
-    instance = this;
-  }
-  
-  private void copyValuesFrom(Config config) {
-    this.version = config.version;
-    this.serializeRootPath = config.serializeRootPath;
-    this.serializeEverything = config.serializeEverything;
-    this.serializedStock = config.serializedStock;
+
+    return this;
   }
 
   @Override
+  public void saveProps() {
+    try {
+      Properties properties = new Properties();
+
+      File file = new File(PROPS_PATH);
+      if (!file.exists()) {
+        file.mkdir();
+      }
+
+      FileOutputStream outputStream = new FileOutputStream(PROPS_PATH + "dataConfig.properties");
+      Field[] fields = this.getClass().getDeclaredFields();
+
+      for(Field field : fields) {
+        if(field.getName().equals("serialVersionUID") || 
+          field.getName().equals("instance") ||
+          field.getName().equals("propertiesPath")
+        ) continue;
+
+        field.setAccessible(true);
+        Object value = field.get(this);
+        properties.put(field.getName(), value.toString());
+      }
+
+      properties.store(outputStream, null);
+    } catch(Exception e){
+      e.printStackTrace();
+    }
+  }
+
+  @Override
+  public void deleteProps(String propsName) {
+    String path = PROPS_PATH + propsName;
+    try {
+      new File(path).delete();
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+
+  @Override
+  @Deprecated
   public Config getSavedObject() {
     Config obj = null;
     try {
@@ -96,31 +161,13 @@ public class Config implements SaveableObject<Config> {
     }
     return obj;
   }
-
-  @Override
-  public void saveObject() {
-    try {
-      Properties properties = new Properties();
-      FileOutputStream outputStream = new FileOutputStream(System.getProperty("user.dir") + "\\config\\dataConfig.properties");
-      Field[] fields = this.getClass().getDeclaredFields();
-
-      for(Field field : fields) {
-        if(field.getName() == "serialVersionUID" || field.getName() == "instance") continue;
-
-        field.setAccessible(true);
-        Object value = field.get(this);
-        properties.put(field.getName(), value.toString());
-      }
-
-      properties.store(outputStream, null);
-    } catch(Exception e){
-      System.out.println(e.fillInStackTrace());
-    }
-  }
-
+  
   @Override
   public String toString() {
-    return "Config [version=" + version + ", serializedRoot=" + serializeRootPath + ", serializeEverything="
-        + serializeEverything + ", serializeStorage=" + serializedStock + "]";
+    return "Config [version=" + version + 
+        ", serializedRoot=" + serializeRootPath + 
+        ", serializeEverything=" + serializeEverything +
+        ", serializeStorage=" + serializedStock + "]";
   }
+
 }

@@ -3,9 +3,9 @@ package model;
 import java.io.File;
 import java.util.UUID;
 
-import interfaces.SaveableObject;
+import interfaces.SerializableObject;
 
-public class Product implements SaveableObject<Product> {
+public class Product implements SerializableObject<Product> {
     private UUID id = UUID.randomUUID();
     private String name;
     private String description;

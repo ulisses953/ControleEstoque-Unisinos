@@ -4,9 +4,9 @@ import java.io.File;
 import java.util.List;
 import java.util.UUID;
 
-import interfaces.SaveableObject;
+import interfaces.SerializableObject;
 
-public class Stock implements SaveableObject<Stock>{
+public class Stock implements SerializableObject<Stock>{
     private UUID id = UUID.randomUUID();
     private List<Product> products;
 
