@@ -24,7 +24,6 @@ public class Config implements PropertiesOperations<Config>, SerializableObject<
   public static Config getInstance() {
     if(instance == null)
       instance = new Config();
-
     return instance;
   }
 
