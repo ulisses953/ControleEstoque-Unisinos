@@ -12,7 +12,7 @@ public class SerializableManager<T> implements SerializableOperations<T> {
   }
   
   private String getFilePath(T object) {
-    return config.getSerializeRootPath() + "\\" + object.getClass().getName() + ".ser";
+    return config.getSerializeRootPath() + object.getClass().getName() + ".ser";
   }
 
   public void serialize(T object) {

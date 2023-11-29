@@ -13,7 +13,7 @@ public class Config implements PropertiesOperations<Config>, SerializableObject<
   private static final long serialVersionUID = 1L;
 
   private String version = "0.0.1";
-  private String serializeRootPath = System.getProperty("user.dir") + "\\serializedData";
+  private String serializeRootPath = System.getProperty("user.dir") + "\\serializedData\\";
   private boolean serializeEverything = false;
   private boolean serializedStock = false;
 
@@ -66,8 +66,8 @@ public class Config implements PropertiesOperations<Config>, SerializableObject<
     try {
       Properties properties = new Properties();
       FileInputStream inputStream = new FileInputStream(PROPS_PATH + "dataConfig.properties");
-
       properties.load(inputStream);
+      inputStream.close();
 
       Field[] fields = this.getClass().getDeclaredFields();
 
@@ -92,7 +92,6 @@ public class Config implements PropertiesOperations<Config>, SerializableObject<
           field.set(this, value);
         }
       }
-      inputStream.close();
     } catch (FileNotFoundException fileNotFoundException) {
       saveProps();
     } catch(Exception e) {
@@ -112,21 +111,24 @@ public class Config implements PropertiesOperations<Config>, SerializableObject<
         file.mkdir();
       }
 
-      FileOutputStream outputStream = new FileOutputStream(PROPS_PATH + "dataConfig.properties");
       Field[] fields = this.getClass().getDeclaredFields();
 
       for(Field field : fields) {
-        if(field.getName().equals("serialVersionUID") || 
-          field.getName().equals("instance") ||
-          field.getName().equals("propertiesPath")
-        ) continue;
+        String fieldName = field.getName();
+
+        boolean ignoredFields = fieldName.equals("serialVersionUID") || 
+                                fieldName.equals("instance") || 
+                                fieldName.equals("propertiesPath");
+        if(ignoredFields) continue;
 
         field.setAccessible(true);
         Object value = field.get(this);
-        properties.put(field.getName(), value.toString());
+        properties.put(fieldName, value.toString());
       }
 
+      FileOutputStream outputStream = new FileOutputStream(PROPS_PATH + "dataConfig.properties");
       properties.store(outputStream, null);
+      outputStream.close();
     } catch(Exception e){
       e.printStackTrace();
     }
@@ -134,9 +136,41 @@ public class Config implements PropertiesOperations<Config>, SerializableObject<
 
   @Override
   public void deleteProps(String propsName) {
-    String path = PROPS_PATH + propsName;
+    String path = PROPS_PATH + propsName + ".properties";
     try {
       new File(path).delete();
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+
+  @Override
+  public Object getPropObject(String propKey) {
+    try {
+      Properties properties = new Properties();
+      FileInputStream inputStream = new FileInputStream(PROPS_PATH + "dataConfig.properties");
+      properties.load(inputStream);
+      inputStream.close();
+
+      return properties.getProperty(propKey);
+    } catch(Exception e){
+      e.printStackTrace();
+    }
+    return null;
+  }
+
+  @Override
+  public void setPropObject(String propKey, String propValue) {
+    try {
+      Properties properties = new Properties();
+      FileInputStream fileInputStream = new FileInputStream(PROPS_PATH + "dataConfig.properties");
+      properties.load(fileInputStream);
+      fileInputStream.close();
+      properties.setProperty(propKey, propValue);
+
+      FileOutputStream fileOutputStream = new FileOutputStream(PROPS_PATH + "dataConfig.properties");
+      properties.store(fileOutputStream, null);
+      fileOutputStream.close();
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -147,7 +181,7 @@ public class Config implements PropertiesOperations<Config>, SerializableObject<
   public Config getSavedObject() {
     Config obj = null;
     try {
-      String path = serializeRootPath + "\\" + this.getClass().getName() + ".ser";
+      String path = serializeRootPath + this.getClass().getName() + ".ser";
       FileInputStream fileIn = new FileInputStream(path);
       ObjectInputStream in = new ObjectInputStream(fileIn);
       obj = (Config) in.readObject();
