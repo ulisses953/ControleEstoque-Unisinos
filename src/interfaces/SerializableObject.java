@@ -2,10 +2,24 @@ package interfaces;
 
 import java.io.Serializable;
 
-public interface SerializableObject<T> extends Serializable {
-  void saveObject();
-  
-  T getSerializedObject();
+import model.SerializableManager;
 
-  void deleteSave();
+@SuppressWarnings("unchecked")
+public interface SerializableObject<T> extends Serializable {
+
+  default SerializableManager<T> getManager() {
+    return new SerializableManager<T>();
+  }
+
+  default void saveObject() {
+    getManager().serialize((T) this);
+  }
+
+  default T getSavedObject() {
+    return getManager().deserialize((T) this);
+  }
+  
+  default void deleteSave() {
+    getManager().removeSerialization((T) this);
+  }
 }

@@ -2,7 +2,9 @@ package model;
 
 import java.util.UUID;
 
-public class Product extends AbstractSerializableObject<Product> {
+import interfaces.SerializableObject;
+
+public class Product implements SerializableObject<Product> {
     private UUID id = UUID.randomUUID();
     private String name;
     private String description;
