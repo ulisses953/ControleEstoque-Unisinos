@@ -21,8 +21,8 @@ public class SavePropsTest {
   
   @Test
   public void saveOnDefault() {
-    Config.getInstance();
-    File filePath = new File(System.getProperty("user.dir") + "\\config\\dataConfig.properties");
+    Config c = Config.getInstance();
+    File filePath = new File(System.getProperty("user.dir") + "\\config\\data" + c.getClass().getName() + ".properties");
     assertTrue(filePath.exists());
 
     afterEach();    
@@ -35,7 +35,7 @@ public class SavePropsTest {
     c.setVersion("0.0.2");
     c.saveProps();
 
-    File filePath = new File(System.getProperty("user.dir") + "\\config\\dataConfig.properties");
+    File filePath = new File(System.getProperty("user.dir") + "\\config\\data" + c.getClass().getName() + ".properties");
     assertTrue(filePath.exists());
 
     afterEach();
@@ -44,11 +44,11 @@ public class SavePropsTest {
   @Test
   public void propsAreSaved() {
     Config c = Config.getInstance();
-    String pathName = System.getProperty("user.dir") + "\\config\\dataConfig.properties";
+    File filePath = new File(System.getProperty("user.dir") + "\\config\\data" + c.getClass().getName() + ".properties");
     Properties properties = new Properties();
     Properties newProperties = new Properties();
     try {
-      FileInputStream fileInputStream = new FileInputStream(pathName);
+      FileInputStream fileInputStream = new FileInputStream(filePath);
       properties.load(fileInputStream);
 
       fileInputStream.close();
@@ -60,7 +60,7 @@ public class SavePropsTest {
     c.saveProps();
     
     try {
-      FileInputStream fileInputStream = new FileInputStream(pathName);
+      FileInputStream fileInputStream = new FileInputStream(filePath);
       newProperties.load(fileInputStream);
 
       fileInputStream.close();
@@ -76,14 +76,14 @@ public class SavePropsTest {
   @Test
   public void ignoreFields() {
     Config c = Config.getInstance();
-    String pathName = System.getProperty("user.dir") + "\\config\\dataConfig.properties";
+    File filePath = new File(System.getProperty("user.dir") + "\\config\\data" + c.getClass().getName() + ".properties");
     Properties properties = new Properties();
 
     c.setVersion("0.0.2");
     c.saveProps();
 
     try {
-      FileInputStream fileInputStream = new FileInputStream(pathName);
+      FileInputStream fileInputStream = new FileInputStream(filePath);
       properties.load(fileInputStream);
 
       fileInputStream.close();

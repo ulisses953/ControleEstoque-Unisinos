@@ -21,8 +21,8 @@ public class GetPropsObjectTest {
 
   @Test
   public void createsPropsByDefault() {
-    Config.getInstance();
-    File filePath = new File(System.getProperty("user.dir") + "\\config\\dataConfig.properties");
+    Config c = Config.getInstance();
+    File filePath = new File(System.getProperty("user.dir") + "\\config\\data" + c.getClass().getName() + ".properties");
     assertTrue(filePath.exists());
 
     afterEach();
@@ -78,10 +78,10 @@ public class GetPropsObjectTest {
   @Test
   public void createsDefaultFileIfDeleted() {
     Config c = Config.getInstance();
-    c.deleteProps("dataConfig.properties");
+    c.deleteProps();
     c.getPropsObject();
 
-    File filePath = new File(System.getProperty("user.dir") + "\\config\\dataConfig.properties");
+    File filePath = new File(System.getProperty("user.dir") + "\\config\\data" + c.getClass().getName() + ".properties");
     assertTrue(filePath.exists());
 
     afterEach();

@@ -47,7 +47,6 @@ public class Config implements PropertiesOperations<Config>, SerializableObject<
 
   public void setSerializeRootPath(String serializedRoot) {
     setPropObject("serializeRootPath", serializedRoot);
-    this.serializeRootPath = serializedRoot;
   }
 
   public boolean isSerializeEverything() {
@@ -56,7 +55,6 @@ public class Config implements PropertiesOperations<Config>, SerializableObject<
 
   public void setSerializeEverything(boolean serializeEverything) {
     setPropObject("serializeEverything", Boolean.toString(serializeEverything));
-    this.serializeEverything = serializeEverything;
   }
 
   public boolean isSerializeStock() {
@@ -65,7 +63,6 @@ public class Config implements PropertiesOperations<Config>, SerializableObject<
   
   public void setSerializeStock(boolean serializeStorage) {
     setPropObject("serializedStock", Boolean.toString(serializeStorage));
-    this.serializedStock = serializeStorage;
   }
   // #endregion
 
@@ -99,6 +96,7 @@ public class Config implements PropertiesOperations<Config>, SerializableObject<
         } else {
           field.set(this, value);
         }
+        break;
       }
     } catch (FileNotFoundException fileNotFoundException) {
       saveProps();
@@ -134,7 +132,7 @@ public class Config implements PropertiesOperations<Config>, SerializableObject<
         properties.put(fieldName, value.toString());
       }
 
-      FileOutputStream outputStream = new FileOutputStream(PROPS_PATH + "dataConfig.properties");
+      FileOutputStream outputStream = new FileOutputStream(PROPS_PATH + "data" + getClass().getName() + ".properties");
       properties.store(outputStream, null);
       outputStream.close();
     } catch(Exception e){
@@ -143,20 +141,10 @@ public class Config implements PropertiesOperations<Config>, SerializableObject<
   }
 
   @Override
-  public void deleteProps(String propsName) {
-    String path = PROPS_PATH + propsName + ".properties";
-    try {
-      new File(path).delete();
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-  }
-
-  @Override
   public Object getPropObject(String propKey) {
     try {
       Properties properties = new Properties();
-      FileInputStream inputStream = new FileInputStream(PROPS_PATH + "dataConfig.properties");
+      FileInputStream inputStream = new FileInputStream(PROPS_PATH + "data" + getClass().getName() + ".properties");
       properties.load(inputStream);
       inputStream.close();
 
@@ -171,12 +159,39 @@ public class Config implements PropertiesOperations<Config>, SerializableObject<
   public void setPropObject(String propKey, String propValue) {
     try {
       Properties properties = new Properties();
-      FileInputStream fileInputStream = new FileInputStream(PROPS_PATH + "dataConfig.properties");
+      FileInputStream fileInputStream = new FileInputStream(PROPS_PATH + "data" + getClass().getName() + ".properties");
       properties.load(fileInputStream);
       fileInputStream.close();
-      properties.setProperty(propKey, propValue);
 
-      FileOutputStream fileOutputStream = new FileOutputStream(PROPS_PATH + "dataConfig.properties");
+      Field[] fields = this.getClass().getDeclaredFields();
+      for(Field field : fields) {
+        field.setAccessible(true);
+
+        if(field.getName().equals(propKey)) {
+
+          if (field.getType() == boolean.class) {
+            String value = propValue == "true" || propValue == "false" ? propValue : "false";
+            properties.setProperty(propKey, value);
+            field.set(this, Boolean.parseBoolean(propValue));
+
+          } else if (field.getType() == int.class) {
+            properties.setProperty(propKey, propValue);
+            field.set(this, Integer.parseInt(propValue));
+
+          } else if (field.getType() == double.class) {
+            properties.setProperty(propKey, propValue);
+            field.set(this, Double.parseDouble(propValue));
+
+          } else {
+            properties.setProperty(propKey, propValue);
+            field.set(this, propValue);
+          }
+          
+          break;
+        }
+      }
+
+      FileOutputStream fileOutputStream = new FileOutputStream(PROPS_PATH + "data" + getClass().getName() + ".properties");
       properties.store(fileOutputStream, null);
       fileOutputStream.close();
     } catch (Exception e) {
@@ -206,6 +221,33 @@ public class Config implements PropertiesOperations<Config>, SerializableObject<
   public static void resetInstance() {
     instance = null;
   }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj)
+      return true;
+    if (obj == null)
+      return false;
+    if (getClass() != obj.getClass())
+      return false;
+    Config other = (Config) obj;
+    if (serializeEverything != other.serializeEverything)
+      return false;
+    if (serializedStock != other.serializedStock)
+      return false;
+    if (version == null) {
+      if (other.version != null)
+        return false;
+    } else if (!version.equals(other.version))
+      return false;
+    if (serializeRootPath == null) {
+      if (other.serializeRootPath != null)
+        return false;
+    } else if (!serializeRootPath.equals(other.serializeRootPath))
+        return false;
+    return true;
+  }
+  
 
   @Override
   public String toString() {
