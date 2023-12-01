@@ -1,13 +1,11 @@
 package view;
 
 import java.io.IOException;
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.UUID;
 
 import error.SerializedObjectNotFound;
-import model.Config;
 import model.Product;
 import service.ServiceConfig;
 import service.ServiceStock;
@@ -16,7 +14,6 @@ public class MainWindows {
 
     private static Scanner scanner = new Scanner(System.in);
     private static ServiceConfig serviceConfig = new ServiceConfig();
-    private static Config config = Config.getInstance();
     private static ServiceStock stock = new ServiceStock(new ArrayList<>());
 
     static {

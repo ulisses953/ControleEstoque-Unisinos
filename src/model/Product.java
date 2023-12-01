@@ -3,8 +3,6 @@ package model;
 import java.io.Serializable;
 import java.util.UUID;
 
-import net.bytebuddy.implementation.bytecode.Throw;
-
 public class Product implements Serializable {
     private UUID id = UUID.randomUUID();
     private String name;
