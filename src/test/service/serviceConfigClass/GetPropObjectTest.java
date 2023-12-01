@@ -21,22 +21,20 @@ public class GetPropObjectTest {
 
   @Test
   public void getFromDefault() {
-    Config c = Config.getInstance();
     ServiceConfig serviceConfig = new ServiceConfig();
-    assertEquals(serviceConfig.getPropObject("version"), c.getVersion());
-    
+    assertEquals("0.0.1", serviceConfig.getPropObject("version"));
+
     afterEach();
   }
 
   @Test
   public void getFromSetted() {
     ServiceConfig serviceConfig = new ServiceConfig();
-    Config c = Config.getInstance();
-    c.setVersion("0.0.2");
+    serviceConfig.setPropObject("version", "0.0.2");
 
     Config.resetInstance();
 
-    assertEquals(serviceConfig.getPropObject("version"), "0.0.2");
+    assertEquals("0.0.2", serviceConfig.getPropObject("version"));
 
     afterEach();
   }

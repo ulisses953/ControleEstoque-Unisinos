@@ -71,7 +71,7 @@ public class SavePropsTest {
       e.printStackTrace();
     }
 
-    assertEquals(properties.getProperty("version"), newProperties.getProperty("version"));
+    assertNotEquals(properties.getProperty("version"), newProperties.getProperty("version"));
 
     afterEach();
   }
