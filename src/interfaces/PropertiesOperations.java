@@ -16,7 +16,7 @@ public interface PropertiesOperations<T> {
     }
   };
 
-  Object getPropObject(String propKey);
+  String getPropObject(String propKey);
 
   void setPropObject(String propKey, String propValue);
 }

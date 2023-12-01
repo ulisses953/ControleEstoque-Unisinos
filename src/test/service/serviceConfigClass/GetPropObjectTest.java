@@ -12,7 +12,7 @@ import model.Config;
 import service.ServiceConfig;
 
 public class GetPropObjectTest {
-  
+
   @AfterEach
   void afterEach() {
     Config.resetInstance();
@@ -55,10 +55,12 @@ public class GetPropObjectTest {
   }
 
   public void deleteDir(File dir) {
-    if(!dir.isDirectory()) return;
+    if (!dir.isDirectory())
+      return;
 
-    for(File file : dir.listFiles()) {
-      if(file.isDirectory()) deleteDir(file);
+    for (File file : dir.listFiles()) {
+      if (file.isDirectory())
+        deleteDir(file);
       file.delete();
     }
 
