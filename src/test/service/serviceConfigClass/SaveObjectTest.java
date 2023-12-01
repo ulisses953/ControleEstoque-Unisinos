@@ -1,4 +1,4 @@
-package test.model.configClass;
+package test.service.serviceConfigClass;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -9,20 +9,21 @@ import org.junit.Test;
 import org.junit.jupiter.api.AfterEach;
 
 import model.Config;
+import service.ServiceConfig;
 
 public class SaveObjectTest {
-  
+
   @AfterEach
   void afterEach() {
     Config.resetInstance();
-    deleteDir(new File(System.getProperty("user.dir") + "\\serializedData\\"));
     deleteDir(new File(System.getProperty("user.dir") + "\\config\\"));
+    deleteDir(new File(Config.getInstance().getSerializeRootPath()));
   }
 
   @Test
   public void saveFile() {
-    Config c = Config.getInstance();
-    c.saveObject();
+    ServiceConfig serviceConfig = new ServiceConfig();
+    serviceConfig.saveObject();
     File file = new File(System.getProperty("user.dir") + "\\serializedData\\model.Config.ser");
     assertTrue(file.exists());
     
@@ -31,9 +32,10 @@ public class SaveObjectTest {
 
   @Test
   public void savesCorrectly() {
+    ServiceConfig serviceConfig = new ServiceConfig();
+    serviceConfig.saveObject();
+    Config config = serviceConfig.getSavedObject();
     Config c = Config.getInstance();
-    c.saveObject();
-    Config config = c.getSavedObject();
     assertEquals(c, config);
 
     afterEach();
@@ -44,9 +46,10 @@ public class SaveObjectTest {
 
     for(File file : dir.listFiles()) {
       if(file.isDirectory()) deleteDir(file);
+
       file.delete();
     }
-
+    
     dir.delete();
   }
 }

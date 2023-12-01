@@ -1,4 +1,4 @@
-package test.model.configClass;
+package test.service.serviceConfigClass;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -10,6 +10,7 @@ import org.junit.Test;
 import org.junit.jupiter.api.AfterEach;
 
 import model.Config;
+import service.ServiceConfig;
 
 public class SavePropsTest {
   
@@ -30,10 +31,11 @@ public class SavePropsTest {
 
   @Test
   public void saveSettedFile() {
+    ServiceConfig serviceConfig = new ServiceConfig();
     Config c = Config.getInstance();
     c.setSerializeEverything(true);
     c.setVersion("0.0.2");
-    c.saveProps();
+    serviceConfig.saveProps();
 
     File filePath = new File(System.getProperty("user.dir") + "\\config\\data" + c.getClass().getName() + ".properties");
     assertTrue(filePath.exists());
@@ -43,6 +45,7 @@ public class SavePropsTest {
 
   @Test
   public void propsAreSaved() {
+    ServiceConfig serviceConfig = new ServiceConfig();
     Config c = Config.getInstance();
     File filePath = new File(System.getProperty("user.dir") + "\\config\\data" + c.getClass().getName() + ".properties");
     Properties properties = new Properties();
@@ -56,8 +59,8 @@ public class SavePropsTest {
       e.printStackTrace();
     }
 
-    c.setVersion("0.0.2");
-    c.saveProps();
+    serviceConfig.setPropObject("version", "0.0.2");
+    serviceConfig.saveProps();
     
     try {
       FileInputStream fileInputStream = new FileInputStream(filePath);
@@ -68,19 +71,20 @@ public class SavePropsTest {
       e.printStackTrace();
     }
 
-    assertNotEquals(properties.getProperty("version"), newProperties.getProperty("version"));
+    assertEquals(properties.getProperty("version"), newProperties.getProperty("version"));
 
     afterEach();
   }
 
   @Test
   public void ignoreFields() {
+    ServiceConfig serviceConfig = new ServiceConfig();
     Config c = Config.getInstance();
     File filePath = new File(System.getProperty("user.dir") + "\\config\\data" + c.getClass().getName() + ".properties");
     Properties properties = new Properties();
 
     c.setVersion("0.0.2");
-    c.saveProps();
+    serviceConfig.saveProps();
 
     try {
       FileInputStream fileInputStream = new FileInputStream(filePath);

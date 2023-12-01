@@ -1,4 +1,4 @@
-package test.model.configClass;
+package test.service.serviceConfigClass;
 
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -9,6 +9,7 @@ import org.junit.Test;
 import org.junit.jupiter.api.AfterEach;
 
 import model.Config;
+import service.ServiceConfig;
 
 public class DeletePropsTest {
   
@@ -20,11 +21,11 @@ public class DeletePropsTest {
 
   @Test
   public void deleteAsExpected() {
-    Config c = Config.getInstance();
+    ServiceConfig serviceConfig = new ServiceConfig();
     File dir = new File(System.getProperty("user.dir") + "\\config\\");
     boolean value = dir.exists();
     
-    c.deleteProps();
+    serviceConfig.deleteProps();
     for(File file : dir.listFiles()) {
       if(file.getName().equals("dataConfig.properties")) {
         value = false;
@@ -37,9 +38,9 @@ public class DeletePropsTest {
 
   @Test
   public void notThrowOnDeleteTwiceCall() {
-    Config c = Config.getInstance();    
-    c.deleteProps();
-    assertDoesNotThrow(() -> c.deleteProps());
+    ServiceConfig serviceConfig = new ServiceConfig();
+    serviceConfig.deleteProps();
+    assertDoesNotThrow(() -> serviceConfig.deleteProps());
     afterEach();
   }
   

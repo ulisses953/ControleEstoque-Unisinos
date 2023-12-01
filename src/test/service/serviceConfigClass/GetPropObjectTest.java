@@ -1,4 +1,4 @@
-package test.model.configClass;
+package test.service.serviceConfigClass;
 
 import static org.junit.Assert.*;
 
@@ -9,6 +9,7 @@ import org.junit.Test;
 import org.junit.jupiter.api.AfterEach;
 
 import model.Config;
+import service.ServiceConfig;
 
 public class GetPropObjectTest {
   
@@ -21,35 +22,37 @@ public class GetPropObjectTest {
   @Test
   public void getFromDefault() {
     Config c = Config.getInstance();
-    assertEquals(c.getPropObject("version"), c.getVersion());
+    ServiceConfig serviceConfig = new ServiceConfig();
+    assertEquals(serviceConfig.getPropObject("version"), c.getVersion());
     
     afterEach();
   }
 
   @Test
   public void getFromSetted() {
+    ServiceConfig serviceConfig = new ServiceConfig();
     Config c = Config.getInstance();
     c.setVersion("0.0.2");
 
     Config.resetInstance();
 
-    assertEquals(c.getPropObject("version"), "0.0.2");
+    assertEquals(serviceConfig.getPropObject("version"), "0.0.2");
 
     afterEach();
   }
 
   @Test
   public void getUndefined() {
-    Config c = Config.getInstance();
-    assertNull(c.getPropObject(UUID.randomUUID().toString()));
+    ServiceConfig serviceConfig = new ServiceConfig();
+    assertNull(serviceConfig.getPropObject(UUID.randomUUID().toString()));
 
     afterEach();
   }
 
   @Test
   public void getNull() {
-    Config c = Config.getInstance();
-    assertNull(c.getPropObject(UUID.randomUUID().toString()));
+    ServiceConfig serviceConfig = new ServiceConfig();
+    assertNull(serviceConfig.getPropObject(UUID.randomUUID().toString()));
     afterEach();
   }
 

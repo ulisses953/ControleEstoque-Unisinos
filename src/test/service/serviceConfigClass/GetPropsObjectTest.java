@@ -1,4 +1,4 @@
-package test.model.configClass;
+package test.service.serviceConfigClass;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -10,6 +10,7 @@ import org.junit.Test;
 import org.junit.jupiter.api.AfterEach;
 
 import model.Config;
+import service.ServiceConfig;
 
 public class GetPropsObjectTest {
   
@@ -30,8 +31,9 @@ public class GetPropsObjectTest {
 
   @Test
   public void createPropsWithDefaultValues() {
+    ServiceConfig serviceConfig = new ServiceConfig();
     Config c = Config.getInstance();
-    Config config = c.getPropsObject();
+    Config config = serviceConfig.getPropsObject();
 
     assertEquals(c, config);
 
@@ -40,10 +42,11 @@ public class GetPropsObjectTest {
 
   @Test
   public void getSettedBooleanProps() {
+    ServiceConfig serviceConfig = new ServiceConfig();
     Config c = Config.getInstance();
     c.setSerializeStock(true);
     Config.resetInstance();
-    c.getPropsObject();
+    serviceConfig.getPropsObject();
 
     assertTrue(c.isSerializeStock());
     afterEach();
@@ -51,10 +54,11 @@ public class GetPropsObjectTest {
 
   @Test
   public void getSettedStringProps() {
+    ServiceConfig serviceConfig = new ServiceConfig();
     Config c = Config.getInstance();
     c.setVersion("0.0.2");
     Config.resetInstance();
-    c.getPropsObject();
+    serviceConfig.getPropsObject();
 
     assertEquals("0.0.2", c.getVersion());
 
@@ -63,12 +67,13 @@ public class GetPropsObjectTest {
 
   @Test
   public void keepsSerialUID() {
+    ServiceConfig serviceConfig = new ServiceConfig();
     Config c = Config.getInstance();
     c.setVersion("0.0.2");
     c.setSerializeEverything(false);
 
     Config.resetInstance();
-    c.getPropsObject();
+    serviceConfig.getPropsObject();
     
     assertEquals(1L, Config.getSerialversionuid());
 
@@ -77,9 +82,10 @@ public class GetPropsObjectTest {
 
   @Test
   public void createsDefaultFileIfDeleted() {
+    ServiceConfig serviceConfig = new ServiceConfig();
     Config c = Config.getInstance();
-    c.deleteProps();
-    c.getPropsObject();
+    serviceConfig.deleteProps();
+    serviceConfig.getPropsObject();
 
     File filePath = new File(System.getProperty("user.dir") + "\\config\\data" + c.getClass().getName() + ".properties");
     assertTrue(filePath.exists());
@@ -89,8 +95,8 @@ public class GetPropsObjectTest {
 
   @Test
   public void doesNotThrow() {
-    Config c = Config.getInstance();
-    assertDoesNotThrow(() -> c.getPropsObject());
+    ServiceConfig serviceConfig = new ServiceConfig();
+    assertDoesNotThrow(() -> serviceConfig.getPropsObject());
 
     afterEach();
   }
@@ -105,10 +111,11 @@ public class GetPropsObjectTest {
 
   @Test
   public void settedObjectIsNotNull() {
+    ServiceConfig serviceConfig = new ServiceConfig();
     Config c = Config.getInstance();
     c.setVersion("0.0.2");
     Config.resetInstance();
-    c.getPropsObject();
+    serviceConfig.getPropsObject();
 
     assertNotNull(c);
 
@@ -117,25 +124,24 @@ public class GetPropsObjectTest {
 
   @Test
   public void propertiesAreEquals() {
-    Config c = Config.getInstance();
-    String pathName = System.getProperty("user.dir") + "\\config\\dataConfig.properties";
+    ServiceConfig serviceConfig = new ServiceConfig();
+    String pathName = System.getProperty("user.dir") + "\\config\\datamodel.Config.properties";
     Properties properties = new Properties();
     Properties newProperties = new Properties();
     try {
       FileInputStream fileInputStream = new FileInputStream(pathName);
       properties.load(fileInputStream);
-
       fileInputStream.close();
     } catch(Exception e) {
       e.printStackTrace();
     }
 
     Config.resetInstance();
-    c.getPropsObject();
+    serviceConfig.getPropsObject();
+    
     try {
       FileInputStream fileInputStream = new FileInputStream(pathName);
       newProperties.load(fileInputStream);
-
       fileInputStream.close();
     } catch(Exception e) {
       e.printStackTrace();
@@ -148,9 +154,11 @@ public class GetPropsObjectTest {
 
   @Test
   public void getWithDifferentType() {
+    ServiceConfig serviceConfig = new ServiceConfig();
     Config c = Config.getInstance();
-    c.setPropObject("serializeEverything", "string");
-    c.getPropsObject();
+    serviceConfig.setPropObject("serializeEverything", "string");
+    serviceConfig.getPropsObject();
+    
     assertFalse(c.isSerializeEverything());
 
     afterEach();

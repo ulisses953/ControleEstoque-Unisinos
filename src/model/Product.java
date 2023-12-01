@@ -2,9 +2,9 @@ package model;
 
 import java.util.UUID;
 
-import interfaces.SerializableObject;
+import interfaces.SerializeObject;
 
-public class Product implements SerializableObject<Product> {
+public class Product implements SerializeObject<Product> {
     private UUID id = UUID.randomUUID();
     private String name;
     private String description;

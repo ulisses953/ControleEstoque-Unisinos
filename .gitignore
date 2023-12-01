@@ -25,3 +25,6 @@ replay_pid*
 
 # properties files
 *.properties
+
+# serialized objects
+*.ser
