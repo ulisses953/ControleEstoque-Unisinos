@@ -2,6 +2,7 @@ package interfaces;
 
 import java.io.Serializable;
 
+import error.SerializedObjectNotFound;
 import model.SerializableManager;
 
 @SuppressWarnings("unchecked")
@@ -15,7 +16,7 @@ public interface SerializeObject<T> extends Serializable {
     getManager().serialize((T) this);
   }
 
-  default T getSavedObject() {
+  default T getSavedObject() throws SerializedObjectNotFound{
     return getManager().deserialize((T) this);
   }
   

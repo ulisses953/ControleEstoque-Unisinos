@@ -6,10 +6,11 @@ import java.util.UUID;
 
 import error.IdNotFoundException;
 import interfaces.CRUD;
+import interfaces.SerializeObject;
 import model.Stock;
 import model.Product;
 
-public class ServiceStock implements CRUD<Product, UUID>{
+public class ServiceStock implements CRUD<Product, UUID>, SerializeObject<ServiceStock>{
     private Stock stock;
   
     @Override

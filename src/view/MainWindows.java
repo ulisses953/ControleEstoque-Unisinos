@@ -4,18 +4,31 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.UUID;
 
-import error.IdNotFoundException;
+import error.SerializedObjectNotFound;
 import model.Product;
+import service.ServiceConfig;
 import service.ServiceStock;
 
 public class MainWindows {
 
     private static Scanner scanner = new Scanner(System.in);
+    private static ServiceConfig serviceConfig = new ServiceConfig();
     private static ServiceStock stock = new ServiceStock(new ArrayList<>());
+
+    // talvez alterar o construtor
+    static {
+        if(Boolean.parseBoolean((String) serviceConfig.getPropObject("serializedStock"))){
+            try {
+                stock = stock.getSavedObject();
+            } catch(SerializedObjectNotFound e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
     public static void mainWindows() {
 
-        boolean sair = false;
+        int inputValue;
 
         do {
             System.err.println("Gerenciador de estoque ");
@@ -28,9 +41,13 @@ public class MainWindows {
             System.err.println("7 - Remover quantidade de produto");
             System.err.println("8 - Remover Produto");
 
-            switch (scanner.nextInt()) {
+            inputValue = scanner.nextInt();
+
+            switch (inputValue) {
                 case 1:
-                    sair = true;
+                    if(Boolean.parseBoolean((String) serviceConfig.getPropObject("serializedStock"))){
+                        stock.saveObject();
+                    }
                     break;
                 case 2:
                     addProductWindows();
@@ -57,7 +74,7 @@ public class MainWindows {
                     break;
             }
 
-        } while (sair == false);
+        } while (inputValue != 1);
 
     }
 

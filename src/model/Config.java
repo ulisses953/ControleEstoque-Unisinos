@@ -1,6 +1,7 @@
 package model;
 
 import java.io.*;
+import java.lang.reflect.Field;
 
 import service.ServiceConfig;
 
@@ -56,7 +57,14 @@ public class Config implements Serializable {
   }
 
   public void setSerializeEverything(boolean serializeEverything) {
-    serviceConfig.setPropObject("serializeEverything", Boolean.toString(serializeEverything));
+    if(serializeEverything) {
+      serviceConfig.setPropObject("serializeEverything", Boolean.toString(serializeEverything));
+      for(Field field : instance.getClass().getDeclaredFields()) {
+        if (field.getType() == boolean.class || field.getType() == Boolean.class) {
+          serviceConfig.setPropObject(field.getName(), "true");
+        }
+      }
+    }
   }
 
   public boolean isSerializeStock() {
