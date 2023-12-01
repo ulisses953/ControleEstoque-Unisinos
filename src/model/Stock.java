@@ -3,9 +3,9 @@ package model;
 import java.util.List;
 import java.util.UUID;
 
-import interfaces.SerializableObject;
+import interfaces.SerializeObject;
 
-public class Stock implements SerializableObject<Stock>{
+public class Stock implements SerializeObject<Stock>{
     private UUID id = UUID.randomUUID();
     private List<Product> products;
 

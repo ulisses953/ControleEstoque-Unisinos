@@ -3,21 +3,22 @@ package model;
 import java.io.*;
 
 import interfaces.SerializableOperations;
+import service.ServiceConfig;
 
 public class SerializableManager<T> implements SerializableOperations<T> {
-  private Config config;
+  private ServiceConfig serviceConfig;
   
   public SerializableManager () {
-    this.config = Config.getInstance();
+    this.serviceConfig = new ServiceConfig();
   }
   
   private String getFilePath(T object) {
-    return config.getSerializeRootPath() + object.getClass().getName() + ".ser";
+    return serviceConfig.getPropObject("serializeRootPath") + object.getClass().getName() + ".ser";
   }
 
   public void serialize(T object) {
     try {
-      File directory = new File(config.getSerializeRootPath());
+      File directory = new File((String) serviceConfig.getPropObject("serializeRootPath"));
       if (!directory.exists()) {
         directory.mkdir();
       }

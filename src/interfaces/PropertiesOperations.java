@@ -1,11 +1,20 @@
 package interfaces;
 
+import java.io.File;
+
 public interface PropertiesOperations<T> {
   T getPropsObject();
 
   void saveProps();
 
-  void deleteProps(String propsName);
+  default void deleteProps() {
+    String path = System.getProperty("user.dir") + "\\config\\data" + getClass().getName() + ".properties";
+    try {
+      new File(path).delete();
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  };
 
   Object getPropObject(String propKey);
 
