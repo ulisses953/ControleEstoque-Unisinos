@@ -16,15 +16,13 @@ public class ServiceStock implements CRUD<Product, UUID>, SerializeObject<Servic
     @Override
     public Product update(Product object, UUID id) throws IdNotFoundException {
         final Integer INDEX = findByIndex(id); 
-        List<Product> list = stock.getProducts();
 
         if (INDEX == null) {
             throw new IdNotFoundException("id not found id:" + id);
         }
-
-        list.add(INDEX, object);
-        
-        stock.setProducts(list);
+        object.setId(id);
+        delete(id);
+        stock.getProducts().add(object);
 
         return object;
     }
@@ -73,7 +71,7 @@ public class ServiceStock implements CRUD<Product, UUID>, SerializeObject<Servic
         List<Product> list = stock.getProducts();
 
         for (Product produto : list) {
-            if(produto.getId() == id) {
+            if(produto.getId().equals(id)){
                 return produto;
             }
         }
@@ -88,7 +86,7 @@ public class ServiceStock implements CRUD<Product, UUID>, SerializeObject<Servic
         List<Product> list = stock.getProducts();
 
         for (int i = 0; i < list.size();i++) {
-            if(list.get(i).getId() == id) {
+            if(list.get(i).getId().equals(id)) {
                 return i;
             }
         }

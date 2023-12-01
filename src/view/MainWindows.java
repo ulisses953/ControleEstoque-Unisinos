@@ -31,15 +31,15 @@ public class MainWindows {
         int inputValue;
 
         do {
-            System.err.println("Gerenciador de estoque ");
-            System.err.println("1 - sair");
-            System.err.println("2 - Adicionar Produto");
-            System.err.println("3 - Ver Produtos");
-            System.err.println("4 - Editar Produto");
-            System.err.println("5 - Ver produtos a baixo da quantidade");
-            System.err.println("6 - Adicionar quantidade de produto");
-            System.err.println("7 - Remover quantidade de produto");
-            System.err.println("8 - Remover Produto");
+            System.out.println("Gerenciador de estoque ");
+            System.out.println("1 - sair");
+            System.out.println("2 - Adicionar Produto");
+            System.out.println("3 - Ver Produtos");
+            System.out.println("4 - Editar Produto");
+            System.out.println("5 - Ver produtos a baixo da quantidade");
+            System.out.println("6 - Adicionar quantidade de produto");
+            System.out.println("7 - Remover quantidade de produto");
+            System.out.println("8 - Remover Produto");
 
             inputValue = scanner.nextInt();
 
@@ -79,24 +79,24 @@ public class MainWindows {
     }
 
     private static void addProductWindows() {
-        System.err.println("Nome do Prouto : ");
+        System.out.println("Nome do Prouto : ");
         String name = scanner.next();
 
-        System.err.println("Descrisao do Prouto : ");
+        System.out.println("Descrisao do Prouto : ");
         String description = scanner.next();
 
-        System.err.println("Valor do Prouto : ");
+        System.out.println("Valor do Prouto : ");
         Double price = scanner.nextDouble();
 
-        System.err.println("Quantidade do Prouto : ");
+        System.out.println("Quantidade do Prouto : ");
         Integer quantity = scanner.nextInt();
 
-        System.err.println("Quantidade minima do Prouto : ");
+        System.out.println("Quantidade minima do Prouto : ");
         Integer minimumQuantity = scanner.nextInt();
 
         Product product = new Product(name, description, price, quantity, minimumQuantity);
 
-        System.err.println(product.toString() + "\n");
+        System.out.println(product.toString() + "\n");
 
         stock.save(product);
 
@@ -108,19 +108,19 @@ public class MainWindows {
             System.out.println("informe o id do prouto : ");
             UUID id = UUID.fromString(scanner.next());
 
-            System.err.println("Nome do Prouto : ");
+            System.out.println("Nome do Prouto : ");
             String name = scanner.next();
 
-            System.err.println("Descrisao do Prouto : ");
+            System.out.println("Descrisao do Prouto : ");
             String description = scanner.next();
 
-            System.err.println("Valor do Prouto : ");
+            System.out.println("Valor do Prouto : ");
             Double price = scanner.nextDouble();
 
-            System.err.println("Quantidade do Prouto : ");
+            System.out.println("Quantidade do Prouto : ");
             Integer quantity = scanner.nextInt();
 
-            System.err.println("Quantidade minima do Prouto : ");
+            System.out.println("Quantidade minima do Prouto : ");
             Integer minimumQuantity = scanner.nextInt();
 
             stock.update(new Product(name, description, price, quantity, minimumQuantity), id);
@@ -139,22 +139,22 @@ public class MainWindows {
     }
 
     private static void seeLowOnStockProductsWindows() {
-        System.err.println("Produtos a baixo do estoque : \n");
+        System.out.println("Produtos a baixo do estoque : \n");
 
-        System.err.println(stock.seeLowOnStockProducts().toString());
+        System.out.println(stock.seeLowOnStockProducts().toString());
     }
 
     private static void addToStockWindows() {
 
         try {
-            System.err.println("informe o id : ");
+            System.out.println("informe o id : ");
             UUID id = UUID.fromString(scanner.next());
 
-            System.err.println("Quantidade :");
+            System.out.println("Quantidade :");
             int quantity = scanner.nextInt();
 
-            System.err.println("Qunatidade inserida : \n");
-            System.err.println(stock.addToStock(id, quantity).toString());
+            System.out.println("Qunatidade inserida : \n");
+            System.out.println(stock.addToStock(id, quantity).toString());
 
         } catch (Exception e) {
             System.out.println(e.toString());
@@ -164,14 +164,14 @@ public class MainWindows {
 
     private static void removeFromStockWindows() {
         try {
-            System.err.println("informe o id : ");
+            System.out.println("informe o id : ");
             UUID id = UUID.fromString(scanner.next());
 
-            System.err.println("Quantidade :");
+            System.out.println("Quantidade :");
             int quantity = scanner.nextInt();
 
-            System.err.println("Qunatidade inserida : \n");
-            System.err.println(stock.removeFromStock(id, quantity).toString());
+            System.out.println("Qunatidade inserida : \n");
+            System.out.println(stock.removeFromStock(id, quantity).toString());
 
         } catch (Exception e) {
             System.out.println(e.toString());
@@ -181,10 +181,10 @@ public class MainWindows {
 
     private static void deleteWindows() {
         try {
-            System.err.println("informe o id : ");
+            System.out.println("informe o id : ");
             UUID id = UUID.fromString(scanner.next());
 
-            System.err.println(stock.delete(id).toString());
+            System.out.println(stock.delete(id).toString());
         } catch (Exception e) {
             System.out.println(e.toString());
 
