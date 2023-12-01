@@ -26,6 +26,7 @@ public class ServiceConfig implements PropertiesOperations<Config>, SerializeObj
     } catch(IOException e) {
       throw e;
     }
+
     return properties;
   }
 
@@ -102,6 +103,16 @@ public class ServiceConfig implements PropertiesOperations<Config>, SerializeObj
       properties.store(outputStream, null);
       outputStream.close();
     } catch(Exception e){
+      e.printStackTrace();
+    }
+  }
+
+  @Override
+  public void deleteProps() {
+    String path = System.getProperty("user.dir") + "\\config\\data" + config.getClass().getName() + ".properties";
+    try {
+      new File(path).delete();
+    } catch (Exception e) {
       e.printStackTrace();
     }
   }

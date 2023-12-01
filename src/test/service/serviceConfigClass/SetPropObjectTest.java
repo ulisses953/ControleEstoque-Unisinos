@@ -16,7 +16,7 @@ public class SetPropObjectTest {
   @AfterEach
   void afterEach() {
     Config.resetInstance();
-    // deleteDir(new File(System.getProperty("user.dir") + "\\config\\"));
+    deleteDir(new File(System.getProperty("user.dir") + "\\config\\"));
   }
 
   @Test

@@ -70,9 +70,6 @@ public class Config implements Serializable {
   
   public static void resetInstance() {
     instance = null;
-
-    // deletes old properties
-    new File(System.getProperty("user.dir") + "\\config\\" + getInstance().getClass().getName()).delete();
   }
 
   @Override

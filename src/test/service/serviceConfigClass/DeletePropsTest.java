@@ -1,6 +1,6 @@
 package test.service.serviceConfigClass;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 import java.io.File;
@@ -22,17 +22,9 @@ public class DeletePropsTest {
   @Test
   public void deleteAsExpected() {
     ServiceConfig serviceConfig = new ServiceConfig();
-    File dir = new File(System.getProperty("user.dir") + "\\config\\");
-    boolean value = dir.exists();
-    
     serviceConfig.deleteProps();
-    for(File file : dir.listFiles()) {
-      if(file.getName().equals("dataConfig.properties")) {
-        value = false;
-      };
-    }
 
-    assertTrue(value);
+    assertFalse(new File(System.getProperty("user.dir") + "\\config\\datamodeL.Config.properties").exists());
     afterEach();
   }
 
