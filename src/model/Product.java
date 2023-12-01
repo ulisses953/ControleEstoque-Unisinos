@@ -75,5 +75,13 @@ public class Product implements SerializeObject<Product> {
     public Product() {
     }
 
+    @Override
+    public String toString() {
+        return "Product [id=" + id.toString() + ", name=" + name + ", description=" + description + ", price=" + price
+                + ", quantity=" + quantity + ", minimumQuantity=" + minimumQuantity + "]";
+    }
+
+    
+
     // #endregion
 }

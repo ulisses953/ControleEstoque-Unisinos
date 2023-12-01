@@ -255,6 +255,17 @@ public class ServiceStockTest {
         assertEquals(new ArrayList(), stock.seeLowOnStockProducts());
     }
 
+    @Test   
+    public void test1() throws IdNotFoundException{
+        ArrayList<Product> list = new ArrayList<Product>();
+        Product p1 = new Product();
+        list.add(p1);
+        System.err.println(p1.getId());
+        ServiceStock stock = new ServiceStock(list);
+
+        System.err.println(stock.findByIndex(p1.getId()));
+    }
+
     
     
 }
