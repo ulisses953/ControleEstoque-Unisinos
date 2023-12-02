@@ -1,5 +1,6 @@
 package view;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.UUID;
@@ -15,12 +16,11 @@ public class MainWindows {
     private static ServiceConfig serviceConfig = new ServiceConfig();
     private static ServiceStock stock = new ServiceStock(new ArrayList<>());
 
-    // talvez alterar o construtor
     static {
-        if(Boolean.parseBoolean((String) serviceConfig.getPropObject("serializedStock"))){
+        if (Boolean.parseBoolean(serviceConfig.getPropObject("serializedStock"))) {
             try {
                 stock = stock.getSavedObject();
-            } catch(SerializedObjectNotFound e) {
+            } catch (SerializedObjectNotFound e) {
                 e.printStackTrace();
             }
         }
@@ -45,7 +45,7 @@ public class MainWindows {
 
             switch (inputValue) {
                 case 1:
-                    if(Boolean.parseBoolean((String) serviceConfig.getPropObject("serializedStock"))){
+                    if (Boolean.parseBoolean(serviceConfig.getPropObject("serializedStock"))) {
                         stock.saveObject();
                     }
                     break;
@@ -70,6 +70,8 @@ public class MainWindows {
                 case 8:
                     deleteWindows();
                     break;
+                case 9:
+                    openConfig();
                 default:
                     break;
             }
@@ -192,4 +194,43 @@ public class MainWindows {
 
     }
 
+    private static void openConfig() {
+        System.out.println("\n\t[CONFIG]");
+
+        final int[] a = { 0 };
+        try {
+            serviceConfig.getProperties().forEach((key, value) -> {
+                System.out.println(a[0] + " - " + key + ": " + value);
+                a[0] += 1;
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println("Enter the variable name to change its value");
+        System.out.println("or exit by typing 'exit'");
+
+        scanner.nextLine();
+        String value = scanner.nextLine();
+
+        if (value.equals("exit"))
+            return;
+        try {
+            setConfigValue(value);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void setConfigValue(String a) throws IOException {
+        System.out.println("Write the new value for " + a);
+        System.out.println("or exit by typing 'exit'");
+
+        String value = scanner.nextLine();
+
+        if (value.equals("exit"))
+            return;
+
+        serviceConfig.setPropObject(a, value);
+    }
 }

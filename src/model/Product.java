@@ -1,11 +1,9 @@
 package model;
 
+import java.io.Serializable;
 import java.util.UUID;
 
-import interfaces.SerializeObject;
-import net.bytebuddy.implementation.bytecode.Throw;
-
-public class Product implements SerializeObject<Product> {
+public class Product implements Serializable {
     private UUID id = UUID.randomUUID();
     private String name;
     private String description;
@@ -31,7 +29,7 @@ public class Product implements SerializeObject<Product> {
     }
 
     public void setName(String name) {
-        if (name == null || name.length() < 5 ) {
+        if (name == null || name.length() < 5) {
             throw new IllegalArgumentException();
         }
 
@@ -62,7 +60,7 @@ public class Product implements SerializeObject<Product> {
     }
 
     public void setQuantity(int quantity) {
-        if (quantity < 0 ) {
+        if (quantity < 0) {
             throw new IllegalArgumentException("quantity not negative");
         }
         this.quantity = quantity;
@@ -73,7 +71,7 @@ public class Product implements SerializeObject<Product> {
     }
 
     public void setMinimumQuantity(int minimumQuantity) {
-          if (minimumQuantity < 0 ) {
+        if (minimumQuantity < 0) {
             throw new IllegalArgumentException("minimumQuantity not negative");
         }
 
@@ -99,8 +97,6 @@ public class Product implements SerializeObject<Product> {
         return "Product [id=" + id.toString() + ", name=" + name + ", description=" + description + ", price=" + price
                 + ", quantity=" + quantity + ", minimumQuantity=" + minimumQuantity + "]";
     }
-
-    
 
     // #endregion
 }

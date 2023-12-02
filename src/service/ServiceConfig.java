@@ -9,21 +9,22 @@ import interfaces.SerializeObject;
 import model.Config;
 import model.SerializableManager;
 
-public class ServiceConfig implements PropertiesOperations<Config>, SerializeObject<Config>{
+public class ServiceConfig implements PropertiesOperations<Config>, SerializeObject<Config> {
   private Config config = Config.getInstance();
 
   public ServiceConfig() {
   }
 
-  private Properties getProperties() throws IOException {
+  public Properties getProperties() throws IOException {
     Properties properties = new Properties();
     try {
-      FileInputStream fileInputStream = new FileInputStream(config.PROPS_PATH + "data" + config.getClass().getName() + ".properties");
+      FileInputStream fileInputStream = new FileInputStream(
+          config.PROPS_PATH + "data" + config.getClass().getName() + ".properties");
       properties.load(fileInputStream);
       fileInputStream.close();
-    } catch(FileNotFoundException e) {
+    } catch (FileNotFoundException e) {
       throw e;
-    } catch(IOException e) {
+    } catch (IOException e) {
       throw e;
     }
 
@@ -37,14 +38,16 @@ public class ServiceConfig implements PropertiesOperations<Config>, SerializeObj
       Properties properties = getProperties();
       Field[] fields = config.getClass().getDeclaredFields();
 
-      for(Field field : fields) {
+      for (Field field : fields) {
         String fieldName = field.getName();
 
-        boolean ignoredFields = fieldName.equals("serialVersionUID") || 
-                                fieldName.equals("instance") || 
-                                fieldName.equals("propertiesPath") ||
-                                fieldName.equals("serviceConfig");
-        if(ignoredFields) continue;
+        boolean ignoredFields = fieldName.equals("serialVersionUID") ||
+            fieldName.equals("instance") ||
+            fieldName.equals("propertiesPath") ||
+            fieldName.equals("serviceConfig") ||
+            fieldName.equals("PROPS_PATH");
+        if (ignoredFields)
+          continue;
 
         field.setAccessible(true);
         String value = properties.getProperty(fieldName);
@@ -66,7 +69,7 @@ public class ServiceConfig implements PropertiesOperations<Config>, SerializeObj
       }
     } catch (FileNotFoundException fileNotFoundException) {
       saveProps();
-    } catch(Exception e) {
+    } catch (Exception e) {
       e.printStackTrace();
     }
 
@@ -85,24 +88,27 @@ public class ServiceConfig implements PropertiesOperations<Config>, SerializeObj
 
       Field[] fields = config.getClass().getDeclaredFields();
 
-      for(Field field : fields) {
+      for (Field field : fields) {
         String fieldName = field.getName();
 
         boolean ignoredFields = fieldName.equals("serialVersionUID") ||
-                                fieldName.equals("instance") ||
-                                fieldName.equals("propertiesPath") ||
-                                fieldName.equals("serviceConfig");
-        if(ignoredFields) continue;
+            fieldName.equals("instance") ||
+            fieldName.equals("propertiesPath") ||
+            fieldName.equals("serviceConfig") ||
+            fieldName.equals("PROPS_PATH");
+        if (ignoredFields)
+          continue;
 
         field.setAccessible(true);
         Object value = field.get(config);
         properties.put(fieldName, value.toString());
       }
 
-      FileOutputStream outputStream = new FileOutputStream(config.PROPS_PATH + "data" + config.getClass().getName() + ".properties");
+      FileOutputStream outputStream = new FileOutputStream(
+          config.PROPS_PATH + "data" + config.getClass().getName() + ".properties");
       properties.store(outputStream, null);
       outputStream.close();
-    } catch(Exception e){
+    } catch (Exception e) {
       e.printStackTrace();
     }
   }
@@ -118,11 +124,11 @@ public class ServiceConfig implements PropertiesOperations<Config>, SerializeObj
   }
 
   @Override
-  public Object getPropObject(String propKey) {
+  public String getPropObject(String propKey) {
     try {
       Properties properties = getProperties();
       return properties.getProperty(propKey);
-    } catch(Exception e){
+    } catch (Exception e) {
       e.printStackTrace();
     }
     return null;
@@ -134,10 +140,10 @@ public class ServiceConfig implements PropertiesOperations<Config>, SerializeObj
       Properties properties = getProperties();
 
       Field[] fields = config.getClass().getDeclaredFields();
-      for(Field field : fields) {
+      for (Field field : fields) {
         field.setAccessible(true);
 
-        if(field.getName().equals(propKey)) {
+        if (field.getName().equals(propKey)) {
 
           if (field.getType() == boolean.class) {
             String value = propValue == "true" || propValue == "false" ? propValue : "false";
@@ -161,7 +167,8 @@ public class ServiceConfig implements PropertiesOperations<Config>, SerializeObj
         }
       }
 
-      FileOutputStream fileOutputStream = new FileOutputStream(config.PROPS_PATH + "data" + config.getClass().getName() + ".properties");
+      FileOutputStream fileOutputStream = new FileOutputStream(
+          config.PROPS_PATH + "data" + config.getClass().getName() + ".properties");
       properties.store(fileOutputStream, null);
       fileOutputStream.close();
     } catch (Exception e) {
@@ -192,5 +199,5 @@ public class ServiceConfig implements PropertiesOperations<Config>, SerializeObj
       e.printStackTrace();
     }
     return obj;
-  }  
+  }
 }
