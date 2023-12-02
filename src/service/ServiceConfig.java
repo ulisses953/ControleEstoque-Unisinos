@@ -146,7 +146,7 @@ public class ServiceConfig implements PropertiesOperations<Config>, SerializeObj
         if (field.getName().equals(propKey)) {
 
           if (field.getType() == boolean.class) {
-            String value = propValue == "true" || propValue == "false" ? propValue : "false";
+            String value = propValue.equals("true") || propValue == "false" ? propValue : "false";
             properties.setProperty(propKey, value);
             field.set(config, Boolean.parseBoolean(propValue));
 
